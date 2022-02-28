@@ -196,43 +196,43 @@ class Spell():
 			
 	def __str__(self):
 		ret_str = '[{0}({1})]: \n'.format(self.spell_name, self.spell_attribute_tags)
-		ret_str += ' actual cast time: {}\n'.format(self._actual_cast_time)
-		ret_str += ' specific amount increase: {}\n'.format(self.specific_amount_increase)
-		ret_str += ' final amount increase: {}\n'.format(self._final_increase)
-		ret_str += ' specific critical increase: {}\n'.format(self.specific_critical_increase)
-		ret_str += ' final critical increase: {}\n'.format(self._final_critical)
+		ret_str += ' actual cast time: {:.2f}\n'.format(self._actual_cast_time)
+		ret_str += ' specific amount increase: {:.2f}\n'.format(self.specific_amount_increase)
+		ret_str += ' final amount increase: {:.2f}\n'.format(self._final_increase)
+		ret_str += ' specific critical increase: {:.2f}\n'.format(self.specific_critical_increase)
+		ret_str += ' final critical increase: {:.2f}\n'.format(self._final_critical)
 		if self.direct_coefficient:
-			ret_str += ' direct coefficient: {}\n'.format(self.direct_coefficient)
+			ret_str += ' direct coefficient: {:.4f}\n'.format(self.direct_coefficient)
 		if self.periodic_coefficient:
-			ret_str += ' periodic coefficient: {}\n'.format(self.periodic_coefficient)
+			ret_str += ' periodic coefficient: {:.4f}\n'.format(self.periodic_coefficient)
 		ret_str += ' database coefficient: {}\n'.format(self.database_coefficient)
 
 
 		if self.direct == True:
 			ret_str += ' [direct amount]:\n'
 			if self.channel == False:
-				ret_str += '  non critical min: {}\n'.format(self._amount_noncritical_direct_min)
-				ret_str += '  non critical max: {}\n'.format(self._amount_noncritical_direct_max)
-				ret_str += '  critical min: {}\n'.format(self._amount_critical_direct_min)
-				ret_str += '  critical max: {}\n'.format(self._amount_critical_direct_max)
-				ret_str += '  average min: {}\n'.format(self._amount_average_direct_min)
-				ret_str += '  average max: {}\n'.format(self._amount_average_direct_max)
-				ret_str += '  per-second min: {}\n'.format(self._amount_ps_direct_min)
-				ret_str += '  per-second max: {}\n'.format(self._amount_ps_direct_max)
+				ret_str += '  non critical min: {:.0f}\n'.format(self._amount_noncritical_direct_min)
+				ret_str += '  non critical max: {:.0f}\n'.format(self._amount_noncritical_direct_max)
+				ret_str += '  critical min: {:.0f}\n'.format(self._amount_critical_direct_min)
+				ret_str += '  critical max: {:.0f}\n'.format(self._amount_critical_direct_max)
+				ret_str += '  average min: {:.0f}\n'.format(self._amount_average_direct_min)
+				ret_str += '  average max: {:.0f}\n'.format(self._amount_average_direct_max)
+				ret_str += '  per-second min: {:.0f}\n'.format(self._amount_ps_direct_min)
+				ret_str += '  per-second max: {:.0f}\n'.format(self._amount_ps_direct_max)
 			else:
-				ret_str += '  non critical: {}\n'.format(self._amount_noncritical_direct_min)
-				ret_str += '  non critical per-tick: {}\n'.format(self._amount_noncritical_direct_max)
-				ret_str += '  critical: {}\n'.format(self._amount_critical_direct_min)
-				ret_str += '  critical per-tick: {}\n'.format(self._amount_critical_direct_max)
+				ret_str += '  non critical: {:.0f}\n'.format(self._amount_noncritical_direct_min)
+				ret_str += '  non critical per-tick: {:.0f}\n'.format(self._amount_noncritical_direct_max)
+				ret_str += '  critical: {:.0f}\n'.format(self._amount_critical_direct_min)
+				ret_str += '  critical per-tick: {:.0f}\n'.format(self._amount_critical_direct_max)
 				ret_str += '  average: {}\n'.format(self._amount_average_direct_min)
-				ret_str += '  average per-tick: {}\n'.format(self._amount_average_direct_max)
+				ret_str += '  average per-tick: {:.0f}\n'.format(self._amount_average_direct_max)
 				ret_str += '  per-second: {}\n'.format(self._amount_ps_direct_min)
-				ret_str += '  per-second per-tick: {}\n'.format(self._amount_ps_direct_max)
+				ret_str += '  per-second per-tick: {:.0f}\n'.format(self._amount_ps_direct_max)
 
 		if self.periodic == True:
 			ret_str += ' [periodic amount]:\n'
-			ret_str += '  non critical total: {}\n'.format(self._amount_noncritical_total_periodic)
-			ret_str += '  non critical per-tick: {}\n'.format(self._amount_noncritical_tick_periodic)
+			ret_str += '  non critical total: {:.0f}\n'.format(self._amount_noncritical_total_periodic)
+			ret_str += '  non critical per-tick: {:.0f}\n'.format(self._amount_noncritical_tick_periodic)
 
 		return ret_str
 

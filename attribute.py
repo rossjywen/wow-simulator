@@ -12,7 +12,7 @@ class Attribute():
 		if 'spirit' in attribute_info:
 			self.spell_basic_attr['spirit'] = int(attribute_info['spirit'])
 		if 'spell_haste_rating' in attribute_info:
-			self.spell_basic_attr['spell_haste'] = attribute_info['spell_haste_rating'] / 32.79	# first time calculation, may be modified by talent.
+			self.spell_basic_attr['spell_haste'] = attribute_info['spell_haste_rating'] / 32.79	/100 # first time calculation, may be modified by talent.
 		if 'spell_critical_rating' in attribute_info:
 			self.spell_basic_attr['spell_critical_rating'] = attribute_info['spell_critical_rating']
 
