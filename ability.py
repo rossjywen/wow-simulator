@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 
-import json
+import csv
 import sys
 from collections import OrderedDict
 
-class Spell():
+class Spell_ability():
 	def __init__(self, spell_info):
 		assert isinstance(spell_info, dict)
+
 		# below are based on static data from excel file
-		self.spell_name = spell_info['spell_name']
-		self.spell_attribute_tags = spell_info['spell_attribute_tags']
+		self.spell_name = spell_info['ability_name']
+		self.spell_attribute_tags = spell_info['ability_attribute_tags']
 		self.panel_cast_time = float(spell_info['panel_cast_time'])	# used to calculate coefficient, won't be modified
 		self.direct_property = spell_info['direct_property']
 		self.periodic_property = spell_info['periodic_property']
@@ -92,9 +93,8 @@ class Spell():
 	
 	def _calculate_final(self, attr_basic, attr_critical_increase, attr_critical_bonus, attr_increase):
 		self._final_increase = attr_increase[self.school] + self.specific_amount_increase
-		self._final_critical = (attr_basic['intellect'] / 166.6667 + attr_basic['spell_critical_rating'] / 45.91 + attr_critical_increase[self.school]) / 100 + self.specific_critical_increase
+		self._final_critical = attr_basic['spell_critical'] + attr_critical_increase[self.school] + self.specific_critical_increase
 		self._final_critical_bonus = attr_critical_bonus[self.school] + self.specific_critical_bonus_increase
-		# todo class constant
 
 
 	def _calculate_actual_cast_time(self, attr_basic):
@@ -105,7 +105,7 @@ class Spell():
 
 
 	def _parse_direct_property(self):
-		if self.direct_property == None:
+		if self.direct_property == '':
 			pass
 		else:
 			tmp = self.direct_property.split('-')
@@ -113,7 +113,7 @@ class Spell():
 			self.direct_max = int(tmp[1])
 
 	def _parse_periodic_property(self):
-		if self.periodic_property == None:
+		if self.periodic_property == '':
 			pass
 		else:
 			tmp = self.periodic_property.split('-')
@@ -126,12 +126,13 @@ class Spell():
 		for att_item in attrs:
 			#print(att_item)
 			# dmg heal absorb direct channel dot hot hybrid aoe effect fixed
+			# now I cancel the tag 'absorb'
 			if att_item == 'dmg':
 				self.nature = 'dmg'
 			elif att_item == 'heal':
 				self.nature = 'heal'
-			elif att_item == 'absorb':
-				self.nature = 'absorb'
+			#elif att_item == 'absorb':
+			#	self.nature = 'absorb'
 			elif att_item == 'direct':
 				self.direct = True
 			elif att_item == 'channel':
@@ -155,18 +156,18 @@ class Spell():
 
 	def _calculate_coefficient(self):
 		if self.fixed == True:
-			if self.nature == 'absorb':
-				self.direct_coefficient = float(self.database_coefficient)
+			#if self.nature == 'absorb':
+			#	self.direct_coefficient = float(self.database_coefficient)
+			#else:
+			if self.direct == True and self.periodic == True:
+				tmp = self.database_coefficient.split('-')
+				self.direct_coefficient = float(tmp[0])
+				self.periodic_coefficient = float(tmp[1])
 			else:
-				if self.direct == True and self.periodic == True:
-					tmp = self.database_coefficient.split('-')
-					self.direct_coefficient = float(tmp[0])
-					self.periodic_coefficient = float(tmp[1])
-				else:
-					if self.direct == True:
-						self.direct_coefficient = float(self.database_coefficient)
-					if self.periodic == True:
-						self.periodic_coefficient = float(self.database_coefficient)
+				if self.direct == True:
+					self.direct_coefficient = float(self.database_coefficient)
+				if self.periodic == True:
+					self.periodic_coefficient = float(self.database_coefficient)
 		else:
 			if self.direct == True and self.periodic == False:		# direct
 				if self.panel_cast_time < 1.5:
@@ -200,7 +201,7 @@ class Spell():
 		ret_str += ' specific amount increase: {:.2f}\n'.format(self.specific_amount_increase)
 		ret_str += ' final amount increase: {:.2f}\n'.format(self._final_increase)
 		ret_str += ' specific critical increase: {:.2f}\n'.format(self.specific_critical_increase)
-		ret_str += ' final critical increase: {:.2f}\n'.format(self._final_critical)
+		ret_str += ' final critical increase: {:.4f}\n'.format(self._final_critical)
 		if self.direct_coefficient:
 			ret_str += ' direct coefficient: {:.4f}\n'.format(self.direct_coefficient)
 		if self.periodic_coefficient:
@@ -241,13 +242,11 @@ class Spell():
 
 
 if __name__ == '__main__':
-	with open(sys.argv[1]) as fobj:
-		json_content = fobj.read()
-		content = json.loads(json_content)
-
-	for item in content:
-		spl = Spell(item)
-		print(spl)
+	with open(sys.argv[1], encoding="utf-8-sig", mode='r') as fobj:
+		content = csv.DictReader(fobj)
+		for item in content:
+			spl = Spell_ability(item)
+			print('[{0}({1})]: \n'.format(spl.spell_name, spl.spell_attribute_tags))
 
 
 

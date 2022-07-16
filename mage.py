@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import json
+import csv
 from collections import OrderedDict
 from attribute import Attribute
-from spell import Spell
+from ability import Spell_ability
 
 
 
@@ -27,7 +27,7 @@ class MageTalent():
 	def frost_1_2(self, count):
 		'''Improved Frostbolt'''
 		assert count in (0,1,2,3,4,5)
-		self.spells['Frostbolt'].modified_panel_cast_time -= count * 0.1
+		self.spell_abilities['Frostbolt'].modified_panel_cast_time -= count * 0.1
 
 	def frost_1_3(self, count):
 		'''Ice Floes'''
@@ -82,26 +82,27 @@ class MageTalent():
 		'''Shatter'''
 		pass
 
-	def frost_5_1(self, count):
+	def frost_5_2(self, count):
 		'''Cold Snap'''
 		pass
 
-	def frost_5_2(self, count):
+	def frost_5_3(self, count):
 		'''Improved Cone of Cold'''
 		assert count in (0,1,2,3)
-		self.spells['Cone of Cold'].specific_amount_increase += count * 0.15
+		self.spell_abilities['Cone of Cold'].specific_amount_increase += count * 0.15
 
-	def frost_5_3(self, count):
+	def frost_5_4(self, count):
 		'''Frozen Core'''
 		assert count in (0,1,2,3)
-		self.damage_reduce['spell'] -= count * 0.02
-		self.damage_reduce['melee'] -= count * 0.02
+		#self.damage_reduce['spell'] -= count * 0.02
+		#self.damage_reduce['melee'] -= count * 0.02
+		pass
 
 	def frost_6_1(self, count):
 		'''Cold as Ice'''
 		pass
 
-	def frost_6_2(self, count):
+	def frost_6_3(self, count):
 		'''Winters Chill'''
 		pass
 
@@ -118,13 +119,13 @@ class MageTalent():
 		assert count in (0,1,2,3,4,5)
 		self.spell_amount_increase['frost']+= count * 0.01
 
-	def frost_8_1(self, count):
+	def frost_8_2(self, count):
 		'''Empowered Frostbolt'''
 		assert count in (0,1,2)
-		self.spells['Frostbolt'].direct_coefficient += count * 0.1
-		self.spells['Frostbolt'].modified_panel_cast_time -= count * 0.1
+		self.spell_abilities['Frostbolt'].direct_coefficient += count * 0.05
+		self.spell_abilities['Frostbolt'].modified_panel_cast_time -= count * 0.1
 		
-	def frost_8_2(self, count):
+	def frost_8_3(self, count):
 		'''Fingers of Frost'''
 		pass
 
@@ -140,14 +141,14 @@ class MageTalent():
 		'''Enduring Winter'''
 		pass
 
-	def frost_10_1(self, count):
+	def frost_10_2(self, count):
 		'''Chilled to the Bone'''
 		assert count in (0,1,2,3,4,5)
-		self.spells['Frostbolt'].specific_amount_increase += count * 0.02
-		self.spells['Frostfire Bolt'].specific_amount_increase += count * 0.02
-		self.spells['Ice Lance'].specific_amount_increase += count * 0.02
+		self.spell_abilities['Frostbolt'].specific_amount_increase += count * 0.01
+		self.spell_abilities['Frostfire Bolt'].specific_amount_increase += count * 0.01
+		self.spell_abilities['Ice Lance'].specific_amount_increase += count * 0.01
 
-	def frost_11_1(self, count):
+	def frost_11_2(self, count):
 		'''Deep Freeze'''
 		pass
 
@@ -158,15 +159,15 @@ class MageTalent():
 	def fire_1_2(self, count):
 		'''Incineration'''
 		assert count in (0,1,2,3)
-		self.spells['Fire Blast'].specific_critical_increase += count * 0.02
-		self.spells['Scorch'].specific_critical_increase += count * 0.02
-		self.spells['Arcane Blast'].specific_critical_increase += count * 0.02
-		self.spells['Cone of Cold'].specific_critical_increase += count * 0.02
+		self.spell_abilities['Fire Blast'].specific_critical_increase += count * 0.02
+		self.spell_abilities['Scorch'].specific_critical_increase += count * 0.02
+		self.spell_abilities['Arcane Blast'].specific_critical_increase += count * 0.02
+		self.spell_abilities['Cone of Cold'].specific_critical_increase += count * 0.02
 
 	def fire_1_3(self, count):
 		'''Improved Fireball'''
 		assert count in (0,1,2,3,4,5)
-		self.spells['Fire Ball'].modified_cast_time -= count * 0.1
+		self.spell_abilities['Fireball'].modified_panel_cast_time -= count * 0.1
 
 	def fire_2_1(self, count):
 		'''Ignite'''
@@ -179,12 +180,12 @@ class MageTalent():
 	def fire_2_3(self, count):
 		'''World In Flames'''
 		assert count in (0,1,2,3)
-		self.spells['Flamestrike'].specific_critical_increase += count * 0.02
-		self.spells['Pyroblast'].specific_critical_increase += count * 0.02
-		self.spells['Blast Wave'].specific_critical_increase += count * 0.02
-		self.spells['Dragons Breath'].specific_critical_increase += count * 0.02
-		self.spells['Blizzard'].specific_critical_increase += count * 0.02
-		self.spells['Arcane Explosion'].specific_critical_increase += count * 0.02
+		self.spell_abilities['Flamestrike'].specific_critical_increase += count * 0.02
+		self.spell_abilities['Pyroblast'].specific_critical_increase += count * 0.02
+		self.spell_abilities['Blast Wave'].specific_critical_increase += count * 0.02
+		self.spell_abilities['Dragons Breath'].specific_critical_increase += count * 0.02
+		self.spell_abilities['Blizzard'].specific_critical_increase += count * 0.02
+		self.spell_abilities['Arcane Explosion'].specific_critical_increase += count * 0.02
 
 	def fire_3_1(self, count):
 		'''Flame Throwing'''
@@ -205,15 +206,15 @@ class MageTalent():
 	def fire_4_1(self, count):
 		'''Improved Scorch'''
 		assert count in (0,1,2,3)
-		self.spells['Scorch'].specific_critical_increase += count * 0.01
-		self.spells['Fireball'].specific_critical_increase += count * 0.01
-		self.spells['Frostfire Bolt'].specific_critical_increase += count * 0.01
+		self.spell_abilities['Scorch'].specific_critical_increase += count * 0.01
+		self.spell_abilities['Fireball'].specific_critical_increase += count * 0.01
+		self.spell_abilities['Frostfire Bolt'].specific_critical_increase += count * 0.01
 
 	def fire_4_2(self, count):
 		'''Molten Shields'''
 		pass
 
-	def fire_4_3(self, count):
+	def fire_4_4(self, count):
 		'''Master of Elements'''
 		pass
 
@@ -222,8 +223,8 @@ class MageTalent():
 		assert count in (0,1,2,3)
 		for k in self.spell_amount_increase.keys():
 			self.spell_amount_increase[k] += count * 0.01
-		self.damage_reduce['spell'] += count * 0.01
-		self.damage_reduce['melee'] += count * 0.01
+		#self.damage_reduce['spell'] += count * 0.01
+		#self.damage_reduce['melee'] += count * 0.01
 
 	def fire_5_2(self, count):
 		'''Critical Mass'''
@@ -238,7 +239,7 @@ class MageTalent():
 		'''Blazing Speed'''
 		pass
 
-	def fire_6_2(self, count):
+	def fire_6_3(self, count):
 		'''Fire Power'''
 		assert count in (0,1,2,3,4,5)
 		self.spell_amount_increase['fire'] += count * 0.02
@@ -261,12 +262,12 @@ class MageTalent():
 		'''Fiery Payback'''
 		pass
 
-	def fire_8_2(self, count):
+	def fire_8_3(self, count):
 		'''Empowered Fire'''
 		assert count in (0,1,2,3)
-		self.spells['Fireball'].direct_coefficient += count * 0.05
-		self.spells['Frostfire Bolt'].direct_coefficient += count * 0.05
-		self.spells['Pyroblast'].direct_coefficient += count * 0.05
+		self.spell_abilities['Fireball'].direct_coefficient += count * 0.05
+		self.spell_abilities['Frostfire Bolt'].direct_coefficient += count * 0.05
+		self.spell_abilities['Pyroblast'].direct_coefficient += count * 0.05
 
 	def fire_9_1(self, count):
 		'''Firestarter'''
@@ -280,13 +281,13 @@ class MageTalent():
 		'''Hot Streak'''
 		pass
 
-	def fire_10_1(self, count):
+	def fire_10_2(self, count):
 		'''Burnout'''
 		assert count in (0,1,2,3,4,5)
-		for k in self.spell_criitcal_bonus.keys():
-			self.spell_critical_bouns *= 1 + count * 0.1
+		for k in self.spell_critical_bonus.keys():
+			self.spell_critical_bonus[k] *= 1 + count * 0.1
 
-	def fire_11_1(self, count):
+	def fire_11_2(self, count):
 		'''Living Bomb'''
 		pass
 	
@@ -304,8 +305,6 @@ class MageTalent():
 
 	def arcane_2_1(self, count):
 		'''Arcane Fortitude'''
-		# todo intellect will change armor, and talent will change intellect
-		#self.armor += 
 		pass
 
 	def arcane_2_2(self, count):
@@ -323,19 +322,19 @@ class MageTalent():
 	def arcane_3_2(self, count):
 		'''Spell Impact'''
 		assert count in (0,1,2,3)
-		self.spells['Arcane Explosion'].specific_amount_increase += count * 0.02
-		self.spells['Arcane Blast'].specific_amount_increase += count * 0.02
-		self.spells['Blast Wave'].specific_amount_increase += count * 0.02
-		self.spells['Fire Blast'].specific_amount_increase += count * 0.02
-		self.spells['Scorch'].specific_amount_increase += count * 0.02
-		self.spells['Fireball'].specific_amount_increase += count * 0.02
-		self.spells['Ice Lance'].specific_amount_increase += count * 0.02
-		self.spells['Cone of Cold'].specific_amount_increase += count * 0.02
+		self.spell_abilities['Arcane Explosion'].specific_amount_increase += count * 0.02
+		self.spell_abilities['Arcane Blast'].specific_amount_increase += count * 0.02
+		self.spell_abilities['Blast Wave'].specific_amount_increase += count * 0.02
+		self.spell_abilities['Fire Blast'].specific_amount_increase += count * 0.02
+		self.spell_abilities['Scorch'].specific_amount_increase += count * 0.02
+		self.spell_abilities['Fireball'].specific_amount_increase += count * 0.02
+		self.spell_abilities['Ice Lance'].specific_amount_increase += count * 0.02
+		self.spell_abilities['Cone of Cold'].specific_amount_increase += count * 0.02
 
 	def arcane_3_3(self, count):
 		'''Student of the Mind'''
 		assert count in (0,1,2,3)
-		self.spell_basic_attr['spirit'] *= 1 + count * 0.04
+		pass
 
 	def arcane_3_4(self, count):
 		'''Focus Magic'''
@@ -365,10 +364,9 @@ class MageTalent():
 		'''Presence of Mind'''
 		pass
 
-	def arcane_5_3(self, count):
+	def arcane_5_4(self, count):
 		'''Arcane Mind'''
-		assert count in (0,1,2,3,4,5)
-		self.spell_basic_attr['intellect'] *= 1 + count * 0.03
+		pass
 
 	def arcane_6_1(self, count):
 		'''Prismatic Cloak'''
@@ -391,8 +389,8 @@ class MageTalent():
 	def arcane_7_1(self, count):
 		'''Arcane Empowerment'''
 		assert count in (0,1,2,3)
-		self.spells['Arcane Missile'].direct_coefficient += count * 0.15
-		self.spells['Arcane Blast'].specific_amount_increase += count * 0.03
+		self.spell_abilities['Arcane Missile'].direct_coefficient += count * 0.15
+		self.spell_abilities['Arcane Blast'].specific_amount_increase += count * 0.03
 
 	def arcane_7_2(self, count):
 		'''Arcane Power'''
@@ -402,35 +400,34 @@ class MageTalent():
 		'''Incanter Absorption'''
 		pass
 
-	def arcane_8_1(self, count):
+	def arcane_8_2(self, count):
 		'''Arcane Flows'''
 		pass
 
-	def arcane_8_2(self, count):
+	def arcane_8_3(self, count):
 		'''Mind Mastery'''
-		assert count in (0,1,2,3,4,5)
-		self.spell_basic_attr['spell power'] += count * 0.03 * self.spell_basic_attr['intellect']
-
-	def arcane_9_1(self, count):
-		'''Slow'''
 		pass
 
 	def arcane_9_2(self, count):
+		'''Slow'''
+		pass
+
+	def arcane_9_3(self, count):
 		'''Missile Barrage'''
 		pass
 
-	def arcane_10_1(self, count):
+	def arcane_10_2(self, count):
 		'''Netherwind Presence'''
 		assert count in (0,1,2,3)
 		self.spell_basic_attr['spell haste'] += count * 0.02
 
-	def arcane_10_2(self, count):
+	def arcane_10_3(self, count):
 		'''Spell Power'''
 		assert count in (0,1,2)
 		for k in self.spell_critical_bonus.keys():
 			self.spell_critical_bonus[k] *= 1 + count * 0.25
 
-	def arcane_11_1(self, count):
+	def arcane_11_2(self, count):
 		'''Arcane Barrage'''
 		pass
 
@@ -446,12 +443,20 @@ class MageGlyph():
 class Mage(Attribute, MageTalent, MageGlyph):
 	def __init__(self, attr_dict, talent_list):
 		# initialize all spells
-		self.spells = OrderedDict()
-		with open('data/mage_spells.json') as fobj:
-			jsc = fobj.read()
-			content = json.loads(jsc)
-		for item in content:
-			self.spells[item['spell_name']] = Spell(item)
+		self.spell_abilities = OrderedDict()
+		self.melee_abilities = OrderedDict()
+		self.range_abilities = OrderedDict()
+		with open('ability_data/mage_abilities.csv', encoding="utf-8-sig", mode='r') as fobj:
+			content = csv.DictReader(fobj)
+			for item in content:	# every item is a dict
+				if item['ability_type'] == 'magic':
+					self.spell_abilities[item['ability_name']] = Spell_ability(item)
+					#print(item['ability_name'])
+					#print(item)
+				elif item['ability_type'] == 'melee':
+					pass	# todo melee_ability
+				elif item['ability_type'] == 'range':
+					pass	# todo range_ability
 		
 		# initialize attribute
 		Attribute.__init__(self, attr_dict)
@@ -473,7 +478,7 @@ class Mage(Attribute, MageTalent, MageGlyph):
 					continue
 		
 		# calculate amount of spells
-		for spell in self.spells.values():
+		for spell in self.spell_abilities.values():
 			spell.calculate_amount(self.spell_basic_attr, self.spell_critical_increase, self.spell_critical_bonus, self.spell_amount_increase)
 
 

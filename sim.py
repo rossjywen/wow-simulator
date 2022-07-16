@@ -3,6 +3,7 @@
 import sys
 import getopt
 import json
+import csv
 from mage import Mage
 from collections import OrderedDict
 
@@ -11,7 +12,7 @@ def print_usage():
 	print('[usage]:')
 	print('  --class= + specify class (necessary)')
 	print('  --talent= + json file containing the specific talent of class (necessary)')
-	print('  --attribute= + json file containing the attribute without influence of talent (necessary)')
+	print('  --attribute= + csv file containing the attribute without influence of talent (necessary)')
 
 
 p_class=''
@@ -70,16 +71,17 @@ if __name__ == '__main__':
 			sys.exit(1)
 
 		try:
-			with open(p_attribute) as fobj:
-				jsc = fobj.read()
-				attribute_list = json.loads(jsc)
+			with open(p_attribute, encoding="utf-8-sig", mode='r') as fobj:
+				content = csv.DictReader(fobj)
+				for attribute in content:
+					print(attribute)
+					print('')
 		except FileNotFoundError:
 			print('attribute json file not found.')
 			sys.exit(1)
 
-		info = attribute_list[0]
-		charactor = Mage(info, talent_list)
-		for s in charactor.spells.values():
+		charactor = Mage(attribute, talent_list)
+		for s in charactor.spell_abilities.values():
 			print(s)
 	#elif p_class == ... 	# for other classes
 		# do something

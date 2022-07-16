@@ -5,16 +5,23 @@ from collections import OrderedDict
 class Attribute():
 	def __init__(self, attribute_info):
 		self.spell_basic_attr = OrderedDict()
+
 		if 'spell_power' in attribute_info:
 			self.spell_basic_attr['spell_power'] = int(attribute_info['spell_power'])
-		if 'intellect' in attribute_info:
-			self.spell_basic_attr['intellect'] = int(attribute_info['intellect'])
-		if 'spirit' in attribute_info:
-			self.spell_basic_attr['spirit'] = int(attribute_info['spirit'])
-		if 'spell_haste_rating' in attribute_info:
-			self.spell_basic_attr['spell_haste'] = attribute_info['spell_haste_rating'] / 32.79	/100 # first time calculation, may be modified by talent.
-		if 'spell_critical_rating' in attribute_info:
-			self.spell_basic_attr['spell_critical_rating'] = attribute_info['spell_critical_rating']
+		else:
+			print("spell power does not exist")
+
+		if 'spell_haste' in attribute_info:
+			self.spell_basic_attr['spell_haste'] = float(attribute_info['spell_haste'])
+			assert self.spell_basic_attr['spell_haste'] < 1, "haste > 1"
+		else:
+			print("spell haste does not exist")
+
+		if 'spell_critical' in attribute_info:
+			self.spell_basic_attr['spell_critical'] = float(attribute_info['spell_critical'])
+			assert self.spell_basic_attr['spell_critical'] < 1, "critical > 1"
+		else:
+			print("spell critical does not exist")
 
 		self.spell_critical_increase = OrderedDict()
 		self.spell_critical_increase['frost'] = 0  
@@ -45,9 +52,9 @@ class Attribute():
 		#	self.armor = attribute_info['armor']
 		#if 'resilience' in attribute_info:
 		#	self.resilience = attribute_info['resilience']
-		self.damage_reduce = {}
-		self.damage_reduce['spell'] = 1
-		self.damage_reduce['melee'] = 1
+		#self.damage_reduce = {}
+		#self.damage_reduce['spell'] = 1
+		#self.damage_reduce['melee'] = 1
 
 
 
@@ -90,10 +97,8 @@ class Attribute():
 if __name__ == '__main__':
 	info = OrderedDict()
 	info['spell_power']=3999
-	info['intellect']=100
-	info['spirit']=500
-	info['spell_haste_rating']=2000
-	info['spell_critical_rating']=500
+	info['spell_haste']= 0.5
+	info['spell_critical']= 0.7
 	p = Attribute(info)
 	print(p)
 	
