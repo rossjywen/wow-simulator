@@ -1,0 +1,21 @@
+﻿ability_name,ability_type,ability_attribute_tags,panel_cast_time,direct_property,periodic_property,school,database_coefficient
+Frostbolt,magic,dmg-direct-effect-fixed,3,803-866,,frost,0.8571
+Ice Lance,magic,dmg-direct-fixed,0,223-255,,frost,0.1429
+Cone of Cold,magic,dmg-direct-aoe-effect,0,709-776,,frost,0.2036
+Frostfire Bolt,magic,dmg-hybrid-fixed,3,722-838,90-9-3,frost,0.8571-0
+Blizzard,magic,dmg-channel-aoe,8,3408-8,,frost,1.1429
+Frost Nova,magic,dmg-direct-aoe-effect,0,368-419,,frost,0.1936
+Ice Barrier,magic,heal-direct-fixed,0,3300-3300,,frost,0.8053
+Arcane Blast,magic,dmg-direct,2.5,1185-1377,,arcane,0.7143
+Arcane Missile,magic,dmg-channel,5,1800-5,,arcane,1.4286
+Arcane Explosion,magic,dmg-direct-aoe,0,538-582,,arcane,0.2143
+Mana shield,magic,heal-direct-fixed,0,1330-1330,,arcane,0.8053
+Arcane Barrage,magic,dmg-direct-fixed,0,936-1144,,arcane,0.7143
+Blast Wave,magic,dmg-direct-aoe-effect,0,1047-1233,,fire,0.1936
+Dragons Breath,magic,dmg-direct-aoe-effect,0,1101-1279,,fire,0.1936
+Scorch,magic,dmg-direct,1.5,382-451,,fire,0.4286
+Fire Blast,magic,dmg-direct,0,925-1095,,fire,0.4286
+Fireball,magic,dmg-hybrid-fixed,3.5,898-1143,116-8-4,fire,1-0
+Flamestrike,magic,dmg-hybrid-fixed,2,876-1071,780-8-4,fire,0.2357-0.488
+Pyroblast,magic,dmg-hybrid-fixed,5,1190-1510,452-12-4,fire,1.15-0.2
+Living Bomb,magic,dmg-hybrid-fixed,0,690-690,1380-12-4,fire,0.4286-0.8
