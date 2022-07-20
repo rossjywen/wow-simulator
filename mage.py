@@ -49,7 +49,6 @@ class MageTalent():
 
 	def frost_2_3(self, count):
 		'''Precision'''
-		# todo check whether this talent will be displayed in the panel
 		pass
 	
 	def frost_2_4(self, count):
@@ -78,7 +77,6 @@ class MageTalent():
 		pass
 
 	def frost_4_3(self, count):
-		# todo add state
 		'''Shatter'''
 		pass
 
@@ -266,8 +264,13 @@ class MageTalent():
 		'''Empowered Fire'''
 		assert count in (0,1,2,3)
 		self.spell_abilities['Fireball'].direct_coefficient += count * 0.05
+		self.spell_abilities['Fireball'].periodic_coefficient += count * 0.2	# in Warmane the periodic_coefficient increased by (0.2 * count)
+
 		self.spell_abilities['Frostfire Bolt'].direct_coefficient += count * 0.05
+		self.spell_abilities['Frostfire Bolt'].periodic_coefficient += count * 0.2	# in Warmane the periodic_coefficient increased by (0.2 * count)
+
 		self.spell_abilities['Pyroblast'].direct_coefficient += count * 0.05
+		self.spell_abilities['Pyroblast'].periodic_coefficient += count * 0.2	# in Warmane the periodic_coefficient increased by (0.2 * count)
 
 	def fire_9_1(self, count):
 		'''Firestarter'''
@@ -435,12 +438,8 @@ class MageTalent():
 
 
 	
-class MageGlyph():
-	def __init__(self):
-		pass
 
-
-class Mage(Attribute, MageTalent, MageGlyph):
+class Mage(Attribute, MageTalent):
 	def __init__(self, attr_dict, talent_list):
 		# initialize all spells
 		self.spell_abilities = OrderedDict()

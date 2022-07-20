@@ -42,7 +42,7 @@ class Spell_ability():
 		# below are based talent modification
 		self.modified_panel_cast_time = self.panel_cast_time	# used to calculate _actual_cast_time 
 		self.specific_amount_increase = 0
-		self.specific_critical_increase= 0
+		self.specific_critical_increase = 0
 		self.specific_critical_bonus_increase = 0
 
 		# below are based on calculation
@@ -174,7 +174,7 @@ class Spell_ability():
 					self.direct_coefficient = 1.5 / 3.5
 				elif self.panel_cast_time > 7 and self.channel == False:
 					self.direct_coefficient = 7 / 3.5
-				else:
+				else:	# including (channel & > 7) or (non-channel & < 7)
 					self.direct_coefficient = self.panel_cast_time / 3.5
 				if self.nature == 'heal':
 					self.direct_coefficient *= 1.88
