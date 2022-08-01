@@ -60,7 +60,7 @@ class Attribute():
 			print('melee AP does not exist')
 
 		if 'melee_critical' in attribute_info:
-			self.physic_basic_attr['melee_critical'] = int(attribute_info['melee_critical'])
+			self.physic_basic_attr['melee_critical'] = float(attribute_info['melee_critical'])
 		else:
 			print('melee critical does not exist')
 
@@ -72,17 +72,13 @@ class Attribute():
 			print('ranged AP does not exist')
 
 		if 'ranged_critical' in attribute_info:
-			self.physic_basic_attr['ranged_critical'] = int(attribute_info['ranged_critical'])
+			self.physic_basic_attr['ranged_critical'] = float(attribute_info['ranged_critical'])
 		else:
 			print('ranged critical does not exist')
 
 		self.physic_amount_increase = OrderedDict()
 		self.physic_amount_increase['melee'] = 0
 		self.physic_amount_increase['ranged'] = 0
-
-		self.physic_critical_increase = OrderedDict()
-		self.physic_critical_increase['melee'] = 0
-		self.physic_critical_increase['ranged'] = 0
 
 		self.physic_critical_bonus = OrderedDict()
 		self.physic_critical_bonus['melee'] = 1
@@ -206,9 +202,9 @@ if __name__ == '__main__':
 	info = OrderedDict()
 	info['spell_critical']= 0.7
 
-	info['ranged_attack_power']= 323
-	info['ranged_weapon'] = 'ranged-1.7-10-20'
-	info['ammo_dps'] = 3.5
+	info['ranged_attack_power']= 4934
+	info['ranged_weapon'] = 'ranged-3.0-783-1071'
+	info['ammo_dps'] = 91.5
 
 	info['melee_attack_power']= 604
 	info['main_melee_weapon'] = 'two_hand-2.4-33-51'

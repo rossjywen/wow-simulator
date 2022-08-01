@@ -74,6 +74,7 @@ class PriestTalent():
 	def discipline_6_1(self, count):
 		'''Focus Power'''
 		assert count in (0, 1, 2)
+		# todo need fix all-dmg need add 'absorb'
 		for spell in self.spell_abilities.values():
 			if spell.nature == 'heal':
 				spell.specific_amount_increase += 0.02 * count
@@ -406,12 +407,7 @@ class Priest(Attribute, PriestTalent):
 		with open('ability_data/priest_abilities.csv', encoding="utf-8-sig", mode='r') as fobj:
 			content = csv.DictReader(fobj)
 			for item in content:	# every item is a dict
-				if item['ability_type'] == 'magic':
-					self.spell_abilities[item['ability_name']] = Spell_ability(item)
-				elif item['ability_type'] == 'melee':
-					pass	# todo melee_ability
-				elif item['ability_type'] == 'range':
-					pass	# todo range_ability
+				self.spell_abilities[item['ability_name']] = Spell_ability(item)
 		
 		# initialize attribute
 		Attribute.__init__(self, attr_dict)

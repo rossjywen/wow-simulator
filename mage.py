@@ -448,14 +448,9 @@ class Mage(Attribute, MageTalent):
 		with open('ability_data/mage_abilities.csv', encoding="utf-8-sig", mode='r') as fobj:
 			content = csv.DictReader(fobj)
 			for item in content:	# every item is a dict
-				if item['ability_type'] == 'magic':
-					self.spell_abilities[item['ability_name']] = Spell_ability(item)
-					#print(item['ability_name'])
-					#print(item)
-				elif item['ability_type'] == 'melee':
-					pass	# todo melee_ability
-				elif item['ability_type'] == 'range':
-					pass	# todo range_ability
+				self.spell_abilities[item['ability_name']] = Spell_ability(item)
+				#print(item['ability_name'])
+				#print(item)
 		
 		# initialize attribute
 		Attribute.__init__(self, attr_dict)
