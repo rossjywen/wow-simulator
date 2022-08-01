@@ -9,6 +9,7 @@ from collections import OrderedDict
 from mage import Mage
 from priest import Priest
 from warlock import Warlock
+from hunter import Hunter
 
 
 def print_usage():
@@ -41,11 +42,11 @@ def parse_arg(args):
 				print_usage()
 				sys.exit(0)
 			elif opt in ('-c', '--class'):
-				if arg in ('mage', 'warlock', 'priest'):
+				if arg in ('mage', 'warlock', 'priest', 'hunter'):
 					p_class = arg
 				else:
 					print('the class not supported yet or in wrong format')
-					print('currently supported class 1.mage')
+					print('currently supported class 1.mage 2.priest 3.warlock 4.hunter')
 					print_usage()
 					sys.exit(1)
 			elif opt in ('-t', '--talent'):
@@ -118,7 +119,7 @@ if __name__ == '__main__':
 				jsc = fobj.read()
 				talent_list = json.loads(jsc)
 		except FileNotFoundError:
-			print('talent json file not fount.')
+			print('talent json file not found.')
 			sys.exit(1)
 
 		try:
@@ -136,6 +137,30 @@ if __name__ == '__main__':
 		for s in charactor.spell_abilities.values():
 			print(s)
 	
+	elif p_class == 'hunter':
+		try:
+			with open(p_talent) as fobj:
+				jsc = fobj.read()
+				talent_list = json.loads(jsc)
+		except FileNotFoundError:
+			print('talent json file not found.')
+			sys.exit(1)
+
+		try:
+			with open(p_attribute, encoding='utf-8-sig', mode='r') as fobj:
+				content = csv.DictReader(fobj)
+				for attribute in content:
+					print(attribute)
+					print('')
+		except FileNotFoundError:
+			print('attribute json file not found.')
+			sys.exit(1)
+	
+		charactor = Hunter(attribute, talent_list)
+
+		for s in charactor.physic_abilities.values():
+			print(s)
+
 	else:
 		pass
 
