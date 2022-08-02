@@ -787,12 +787,6 @@ aoe技能必然是一个直接的(direct)法术，如牧师的`治疗祷言`；�
 
 ---
 
-`spell_critical_bonus` 字典，包含不同系法术的暴击bonus，如法师[碎冰]增加冰系法术暴击bonus
-
-(只有天赋会改变这个变量，且不会显示在面板上)
-
----
-
 `spell_amount_increase` 字典，包含不同系法术的伤害增加值，如法师[刺骨寒冰]
 
 这个会影响技能的tooltip，所以模拟器读取的静态技能数据都是点天赋之前的tooltip。
@@ -803,7 +797,47 @@ aoe技能必然是一个直接的(direct)法术，如牧师的`治疗祷言`；�
 
 
 
-# 6. 代码附带工具
+# 6. 代码命令及附带工具
+
+**法师**
+
+冰法pvp
+
+> python3 sim.py --class=mage --talent=talent_data/mage_frost_pvp.json --attribute=attribute_data/mage_s8_frost.csv
+
+
+
+**牧师**
+
+暗牧pvp
+
+> python3 sim.py --class=priest --talent=talent_data/priest_shadow_2v2.json --attribute=attribute_data/priest_s8_shadow.csv
+
+戒律pvp (急速)
+
+> python3 sim.py --class=priest --talent=talent_data/priest_disc_solo.json --attribute=attribute_data/priest_s8_disc_haste.csv
+
+
+
+**术士**
+
+毁灭术pvp
+
+> python3 sim.py --class=warlock --talent=talent_data/warlock_destruction_pvp.json --attribute=attribute_data/warlock_s8.csv
+
+痛苦术pvp
+
+> python3 sim.py --class=warlock --talent=talent_data/warlock_affliction_pvp.json --attribute=attribute_data/warlock_s8.csv
+
+
+
+**猎人**
+
+射击猎人(100%破甲的T10.75)
+
+> python3 sim.py --class=hunter --talent=talent_data/hunter_mm_pvp.json --attribute=attribute_data/hunter_T10_mm.csv
+
+
 
 > ./dump_from_excel.py --input=WOW-talents.xlsx --page=no-talent --start=a2 --end=l12 --type=list > no_talent.json
 

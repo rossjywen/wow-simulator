@@ -39,17 +39,19 @@ class Spell_ability():
 		self.periodic_coefficient = None
 		self._calculate_coefficient()
 
+		self.periodic_can_critical = False
+		self.periodic_can_haste = False
+
 		# below are based talent modification
 		self.modified_panel_cast_time = self.panel_cast_time	# used to calculate _actual_cast_time 
 		self.specific_amount_increase = 0
 		self.specific_critical_increase = 0
-		self.specific_critical_bonus_increase = 0
+		self.critical_bonus = 0.5
 
 		# below are based on calculation
 		self._actual_cast_time = None
 		self._final_increase = None
 		self._final_critical = None
-		self._final_critical_bonus = None
 		self._amount_noncritical_direct_min = None
 		self._amount_noncritical_direct_max = None		# if direct it is max, if channel it is per-tick.
 		self._amount_critical_direct_min = None
@@ -62,21 +64,23 @@ class Spell_ability():
 		self._amount_noncritical_tick_periodic = None
 		self._amount_critical_total_periodic = None
 		self._amount_critical_tick_periodic = None
+		self._periodic_duration = 1000
+		self._periodic_duration_tick = 100
 		
 	
 
-	def calculate_amount(self, attr_basic, attr_critical_increase, attr_critical_bonus, attr_increase):
+	def calculate_amount(self, attr_basic, attr_critical_increase, attr_increase):
 		self._calculate_actual_cast_time(attr_basic)
-		self._calculate_final(attr_basic, attr_critical_increase, attr_critical_bonus, attr_increase)
+		self._calculate_final(attr_basic, attr_critical_increase, attr_increase)
 
 		if self.direct == True:				# need to calculate direct part
 			self._amount_noncritical_direct_min = (self.direct_min + attr_basic['spell_power'] * self.direct_coefficient) * (1 + self._final_increase)
-			self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self._final_critical_bonus)
+			self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
 			self._amount_average_direct_min = self._amount_noncritical_direct_min * (1 - self._final_critical) + self._amount_critical_direct_min * self._final_critical
 			self._amount_ps_direct_min = self._amount_noncritical_direct_min / self._actual_cast_time
 			if self.channel == False:		# direct spell
 				self._amount_noncritical_direct_max = (self.direct_max + attr_basic['spell_power'] * self.direct_coefficient) * (1 + self._final_increase)
-				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self._final_critical_bonus)
+				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 				self._amount_average_direct_max = self._amount_noncritical_direct_max * (1 - self._final_critical) + self._amount_critical_direct_max * self._final_critical
 				self._amount_ps_direct_max = self._amount_noncritical_direct_max / self._actual_cast_time
 			else:							# channel spell
@@ -87,14 +91,13 @@ class Spell_ability():
 		if self.periodic == True:			# need to calculate periodic part
 			self._amount_noncritical_total_periodic = (self.periodic_total + attr_basic['spell_power'] * self.periodic_coefficient) * (1 + self._final_increase)
 			self._amount_noncritical_tick_periodic = self._amount_noncritical_total_periodic / self.periodic_tick_count
-			self._amount_critical_total_periodic = self._amount_noncritical_total_periodic * self._final_critical_bonus
+			self._amount_critical_total_periodic = self._amount_noncritical_total_periodic * (1 + self.critical_bonus)
 			self._amount_critical_tick_periodic = self._amount_critical_total_periodic / self.periodic_tick_count
 
 	
-	def _calculate_final(self, attr_basic, attr_critical_increase, attr_critical_bonus, attr_increase):
+	def _calculate_final(self, attr_basic, attr_critical_increase, attr_increase):
 		self._final_increase = attr_increase[self.school] + self.specific_amount_increase
 		self._final_critical = attr_basic['spell_critical'] + attr_critical_increase[self.school] + self.specific_critical_increase
-		self._final_critical_bonus = attr_critical_bonus[self.school] + self.specific_critical_bonus_increase
 
 
 	def _calculate_actual_cast_time(self, attr_basic):
@@ -102,6 +105,13 @@ class Spell_ability():
 			self._actual_cast_time = 1.5 / (1 + attr_basic['spell_haste'])	# equal to GCD
 		else:
 			self._actual_cast_time = self.modified_panel_cast_time / (1 + attr_basic['spell_haste'])
+	
+		if self.periodic == True:
+			if self.periodic_can_haste == True:
+				self._periodic_duration = self.periodic_duration / (1 + attr_basic['spell_haste'])
+			else:
+				self._periodic_duration = self.periodic_duration
+			self._periodic_duration_tick = self._periodic_duration / self.periodic_tick_count
 
 
 	def _parse_direct_property(self):
@@ -203,6 +213,7 @@ class Spell_ability():
 		ret_str += ' final amount increase: {:.2f}\n'.format(self._final_increase)
 		ret_str += ' specific critical increase: {:.2f}\n'.format(self.specific_critical_increase)
 		ret_str += ' final critical increase: {:.4f}\n'.format(self._final_critical)
+		ret_str += ' critical bonus: {:.2f}\n'.format(self.critical_bonus)
 		if self.direct_coefficient:
 			ret_str += ' direct coefficient: {:.4f}\n'.format(self.direct_coefficient)
 		if self.periodic_coefficient:
@@ -232,9 +243,16 @@ class Spell_ability():
 				ret_str += '  per-second per-tick: {:.0f}\n'.format(self._amount_ps_direct_max)
 
 		if self.periodic == True:
-			ret_str += ' [periodic amount]:\n'
+			if self.periodic_can_critical == True:
+				ret_str += ' [periodic amount (can critical hit)]:\n'
+			else:
+				ret_str += ' [periodic amount]:\n'
 			ret_str += '  non critical total: {:.0f}\n'.format(self._amount_noncritical_total_periodic)
+			ret_str += '  duration total: {:.2f}\n'.format(self._periodic_duration)
 			ret_str += '  non critical per-tick: {:.0f}\n'.format(self._amount_noncritical_tick_periodic)
+			if self.periodic_can_critical == True:
+				ret_str += '  critical per-tick: {:.0f}\n'.format(self._amount_critical_tick_periodic)
+			ret_str += '  duration per-tick: {:.2f}\n'.format(self._periodic_duration_tick)
 
 		return ret_str
 
@@ -277,12 +295,11 @@ class Physic_ability():
 		# below are based on talent modification
 		self.specific_amount_increase = 0
 		self.specific_critical_increase = 0
-		self.specific_critical_bonus_increase = 0
+		self.critical_bonus = 1
 		
 		# below are based on calculation
 		self._final_increase = 0
 		self._final_critical = 0
-		self._final_critical_bonus = 0
 
 		self._amount_noncritical_direct_min = 0
 		self._amount_noncritical_direct_max = 0
@@ -337,7 +354,7 @@ class Physic_ability():
 				self.periodic_tick_count = int(tmp[3])
 	
 
-	def _calculate_final(self, attr_basic, attr_amount_increase, attr_critical_bonus):
+	def _calculate_final(self, attr_basic, attr_amount_increase):
 		self._final_increase = self.specific_amount_increase + attr_amount_increase[self.physic_type]
 		
 		if self.physic_type == 'melee':
@@ -345,11 +362,9 @@ class Physic_ability():
 		elif self.physic_type == 'ranged':
 			self._final_critical = attr_basic['ranged_critical'] + self.specific_critical_increase
 		
-		self._final_critical_bonus = attr_critical_bonus[self.physic_type] + self.specific_critical_bonus_increase
-
 	
-	def calculate_amount(self, attr_basic, attr_amount_increase, attr_critical_bonus, main_melee_weapon, off_melee_weapon, ranged_weapon):
-		self._calculate_final(attr_basic, attr_amount_increase, attr_critical_bonus)
+	def calculate_amount(self, attr_basic, attr_amount_increase, main_melee_weapon, off_melee_weapon, ranged_weapon):
+		self._calculate_final(attr_basic, attr_amount_increase)
 		if self.physic_type == 'melee':
 			# weapon part
 			if self.wp_nonnorm == True:
@@ -359,8 +374,8 @@ class Physic_ability():
 				elif self.wp_hand == 'off':
 					self._amount_noncritical_direct_min = (off_melee_weapon['non_norm_dmg_min'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
 					self._amount_noncritical_direct_max = (off_melee_weapon['non_norm_dmg_max'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
-				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self._final_critical_bonus)
-				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self._final_critical_bonus)
+				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
+				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			elif self.wp_norm == True:
 				if self.wp_hand == 'main':
 					self._amount_noncritical_direct_min = (main_melee_weapon['norm_dmg_min'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
@@ -368,8 +383,8 @@ class Physic_ability():
 				elif self.wp_hand == 'off':
 					self._amount_noncritical_direct_min = (off_melee_weapon['norm_dmg_min'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
 					self._amount_noncritical_direct_max = (off_melee_weapon['norm_dmg_max'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
-				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self._final_critical_bonus)
-				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self._final_critical_bonus)
+				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
+				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			elif self.wp_base == True:
 				if self.wp_hand == 'main':
 					self._amount_noncritical_direct_min = (main_melee_weapon['base_dmg_min'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
@@ -377,14 +392,14 @@ class Physic_ability():
 				elif self.wp_hand == 'off':
 					self._amount_noncritical_direct_min = (off_melee_weapon['base_dmg_min'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
 					self._amount_noncritical_direct_max = (off_melee_weapon['base_dmg_max'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
-				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self._final_critical_bonus)
-				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self._final_critical_bonus)
+				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
+				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			# attackpower part
 			if self.ap_direct == True:
 				self._amount_noncritical_direct_min += (attr_basic['melee_attack_power'] * self.ap_coefficient + self.ap_const) * (1 + self._final_increase)
 				self._amount_noncritical_direct_max += (attr_basic['melee_attack_power'] * self.ap_coefficient + self.ap_const) * (1 + self._final_increase)
-				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self._final_critical_bonus)
-				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self._final_critical_bonus)
+				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
+				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			elif self.ap_dot == True:
 				self._periodic_total = (attr_basic['melee_attack_power'] * self.ap_coefficient + self.periodic_const) * (1 + self._final_increase)
 				self._periodic_tick = self._periodic_total / self.periodic_tick_count
@@ -394,24 +409,24 @@ class Physic_ability():
 			if self.wp_nonnorm == True:
 				self._amount_noncritical_direct_min = (ranged_weapon['non_norm_dmg_min'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
 				self._amount_noncritical_direct_max = (ranged_weapon['non_norm_dmg_max'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
-				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self._final_critical_bonus)
-				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self._final_critical_bonus)
+				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
+				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			elif self.wp_norm == True:
 				self._amount_noncritical_direct_min = (ranged_weapon['norm_dmg_min'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
 				self._amount_noncritical_direct_max = (ranged_weapon['norm_dmg_max'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
-				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self._final_critical_bonus)
-				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self._final_critical_bonus)
+				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
+				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			elif self.wp_base == True:
 				self._amount_noncritical_direct_min = (ranged_weapon['base_dmg_min'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
 				self._amount_noncritical_direct_max = (ranged_weapon['base_dmg_max'] * self.wp_coefficient + self.wp_const) * (1 + self._final_increase)
-				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self._final_critical_bonus)
-				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self._final_critical_bonus)
+				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
+				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			# attackpower part
 			if self.ap_direct == True:
 				self._amount_noncritical_direct_min +=  (attr_basic['ranged_attack_power'] * self.ap_coefficient + self.ap_const) * (1 + self._final_increase)
 				self._amount_noncritical_direct_max +=  (attr_basic['ranged_attack_power'] * self.ap_coefficient + self.ap_const) * (1 + self._final_increase)
-				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self._final_critical_bonus)
-				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self._final_critical_bonus)
+				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
+				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			elif self.ap_dot == True:
 				self._periodic_total = (attr_basic['ranged_attack_power'] * self.ap_coefficient + self.periodic_const) * (1 + self._final_increase)
 				self._periodic_tick = self._periodic_total / self.periodic_tick_count
@@ -424,8 +439,7 @@ class Physic_ability():
 		ret_str += ' final amount increase: {:.2f}\n'.format(self._final_increase)
 		ret_str += ' specific critical increase: {:.2f}\n'.format(self.specific_critical_increase)
 		ret_str += ' final critical increase: {:.2f}\n'.format(self._final_critical)
-		ret_str += ' specific critical bonus increase: {:.2f}\n'.format(self.specific_critical_bonus_increase)
-		ret_str += ' final critical bonus: {:.2f}\n'.format(self._final_critical_bonus)
+		ret_str += ' critical bonus: {:.2f}\n'.format(self.critical_bonus)
 		
 		if self.wp == True:
 			ret_str += ' [weapon amount]:\n'

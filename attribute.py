@@ -33,14 +33,6 @@ class Attribute():
 		self.spell_critical_increase['shadow'] = 0
 		self.spell_critical_increase['nature'] = 0
 
-		self.spell_critical_bonus = OrderedDict()
-		self.spell_critical_bonus['frost'] = 0.5
-		self.spell_critical_bonus['fire'] = 0.5
-		self.spell_critical_bonus['arcane'] = 0.5
-		self.spell_critical_bonus['holy'] = 0.5
-		self.spell_critical_bonus['shadow'] = 0.5
-		self.spell_critical_bonus['nature'] = 0.5
-
 		self.spell_amount_increase = OrderedDict()
 		self.spell_amount_increase['frost'] = 0
 		self.spell_amount_increase['fire'] = 0
@@ -80,10 +72,6 @@ class Attribute():
 		self.physic_amount_increase['melee'] = 0
 		self.physic_amount_increase['ranged'] = 0
 
-		self.physic_critical_bonus = OrderedDict()
-		self.physic_critical_bonus['melee'] = 1
-		self.physic_critical_bonus['ranged'] = 1
-
 		
 		self.main_melee_weapon = OrderedDict()
 		if 'main_melee_weapon' in attribute_info and attribute_info['main_melee_weapon'] != None:
@@ -116,7 +104,6 @@ class Attribute():
 				self.ammo_dps = 0
 				print('ammo dps does not exist')
 			self._calculate_ranged_weapon()
-
 		# -------------------- physic part end --------------------
 
 	def _calculate_main_hand_weapon(self):
@@ -171,9 +158,6 @@ class Attribute():
 			ret_str += '|-{0}:{1}\n'.format(k, c)
 		ret_str += '\n'
 		ret_str += '[spell critical bonus]:\n'
-		for k, c in self.spell_critical_bonus.items():
-			ret_str += '|-{0}:{1}\n'.format(k, c)
-		ret_str += '\n'
 
 		# ---------- physic part ----------
 		ret_str += '[physic basic attribute]:\n'

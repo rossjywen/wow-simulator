@@ -355,16 +355,28 @@ class PriestTalent():
 
 	def shadow_7_2(self, count):
 		'''Shadowform'''
-		# todo create a dot cirtical-able variable
-		# todo create a dot haste-able variable
-		self.spell_amount_increase['shadow'] += 0.15	# assume all shadow damage done in Shadowform
+		assert count in (0, 1)
+		if count == 1:
+			self.spell_amount_increase['shadow'] += 0.15	# assume all shadow damage done in Shadowform
+
+			self.spell_abilities['Shadow Word: Pain'].critical_bonus = 1
+			self.spell_abilities['Shadow Word: Pain'].periodic_can_critical = True
+			self.spell_abilities['Shadow Word: Pain'].periodic_can_haste = True
+
+			self.spell_abilities['Devouring Plague'].critical_bonus = 1
+			self.spell_abilities['Devouring Plague'].periodic_can_critical = True 
+			self.spell_abilities['Devouring Plague'].periodic_can_haste = True 
+
+			self.spell_abilities['Vampiric Touch'].critical_bonus = 1
+			self.spell_abilities['Vampiric Touch'].periodic_can_critical = True
+			self.spell_abilities['Vampiric Touch'].periodic_can_haste = True
 
 	def shadow_7_3(self, count):
 		'''Shadow Power'''
 		assert count in (0, 1, 2, 3, 4, 5)
-		self.spell_abilities['Mind Blast'].specific_critical_bonus_increase = 0.5 * (0.2 * count)
-		self.spell_abilities['Mind Flay'].specific_critical_bonus_increase = 0.5 * (0.2 * count)
-		self.spell_abilities['Shadow Word: Death'].specific_critical_bonus_increase = 0.5 * (0.2 * count)
+		self.spell_abilities['Mind Blast'].critical_bonus *= 1 + 0.2 * count
+		self.spell_abilities['Mind Flay'].critical_bonus *= 1 + 0.2 * count
+		self.spell_abilities['Shadow Word: Death'].critical_bonus *= 1 + 0.2 * count
 
 	def shadow_8_1(self, count):
 		'''Improved Shadowform'''
@@ -430,7 +442,7 @@ class Priest(Attribute, PriestTalent):
 		
 		# calculate amount of spells
 		for spell in self.spell_abilities.values():
-			spell.calculate_amount(self.spell_basic_attr, self.spell_critical_increase, self.spell_critical_bonus, self.spell_amount_increase)
+			spell.calculate_amount(self.spell_basic_attr, self.spell_critical_increase, self.spell_amount_increase)
 
 
 

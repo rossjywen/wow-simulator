@@ -142,7 +142,9 @@ class HunterTalent():
 	def marksmanship_2_3(self, count):
 		'''Mortal Shots'''
 		assert count in (0, 1, 2, 3, 4, 5)
-		self.physic_critical_bonus['ranged'] *= 1 + 0.06 * count
+		for ab in self.physic_abilities.values():
+			if ab.physic_type == 'ranged':
+				ab.critical_bonus *= 1 + 0.06 * count
 
 	def marksmanship_3_1(self, count):
 		'''Go for the Throat'''
@@ -244,12 +246,11 @@ class HunterTalent():
 
 	def marksmanship_10_2(self, count):
 		'''Marked for Death'''
- 		#because the _final_critical_bonus is not calculated yet todo fix
-		self.physic_abilities['Aimed Shot'].specific_critical_bonus_increase += (self.physic_critical_bonus['ranged'] + self.physic_abilities['Aimed Shot'].specific_critical_bonus_increase) * (0.02 * count)
-		self.physic_abilities['Arcane Shot'].specific_critical_bonus_increase += (self.physic_critical_bonus['ranged'] + self.physic_abilities['Arcane Shot'].specific_critical_bonus_increase) * (0.02 * count)
-		self.physic_abilities['Steady Shot'].specific_critical_bonus_increase += (self.physic_critical_bonus['ranged'] + self.physic_abilities['Steady Shot'].specific_critical_bonus_increase) * (0.02 * count)
-		self.physic_abilities['Kill Shot'].specific_critical_bonus_increase += (self.physic_critical_bonus['ranged'] + self.physic_abilities['Kill Shot'].specific_critical_bonus_increase) * (0.02 * count)
-		self.physic_abilities['Chimera Shot'].specific_critical_bonus_increase += (self.physic_critical_bonus['ranged'] + self.physic_abilities['Chimera Shot'].specific_critical_bonus_increase) * (0.02 * count)
+		self.physic_abilities['Aimed Shot'].critical_bonus *= 1 + (0.02 * count)
+		self.physic_abilities['Arcane Shot'].critical_bonus *= 1 + (0.02 * count)
+		self.physic_abilities['Steady Shot'].critical_bonus *= 1 + (0.02 * count)
+		self.physic_abilities['Kill Shot'].critical_bonus *= 1 + (0.02 * count)
+		self.physic_abilities['Chimera Shot'].critical_bonus *= 1 + (0.02 * count)
 
 	def marksmanship_11_2(self, count):
 		'''Chimera Shot'''
@@ -409,7 +410,7 @@ class Hunter(Attribute, HunterTalent):
 		
 		# calculate amount of spells
 		for ability in self.physic_abilities.values():
-			ability.calculate_amount(self.physic_basic_attr, self.physic_amount_increase, self.physic_critical_bonus, self.main_melee_weapon, self.off_melee_weapon, self.ranged_weapon)
+			ability.calculate_amount(self.physic_basic_attr, self.physic_amount_increase, self.main_melee_weapon, self.off_melee_weapon, self.ranged_weapon)
 	
 
 

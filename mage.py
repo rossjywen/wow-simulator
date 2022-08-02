@@ -37,11 +37,19 @@ class MageTalent():
 		'''Ice Shards'''
 		assert count in (0,1,2,3)
 		if count <= 2:
-			self.spell_critical_bonus['frost'] *=  1 + count * 0.33
+			self.spell_abilities['Frostbolt'].critical_bonus *=  1 + count * 0.33
+			self.spell_abilities['Ice Lance'].critical_bonus *=  1 + count * 0.33
+			self.spell_abilities['Cone of Cold'].critical_bonus *=  1 + count * 0.33
+			self.spell_abilities['Blizzard'].critical_bonus *=  1 + count * 0.33
+			self.spell_abilities['Frost Nova'].critical_bonus *=  1 + count * 0.33
+			self.spell_abilities['Frostfire Bolt'].critical_bonus *=  1 + count * 0.33
 		elif count == 3:
-			self.spell_critical_bonus['frost'] *= 2
-		else:
-			assert False
+			self.spell_abilities['Frostbolt'].critical_bonus *= 2
+			self.spell_abilities['Ice Lance'].critical_bonus *= 2
+			self.spell_abilities['Cone of Cold'].critical_bonus *= 2
+			self.spell_abilities['Blizzard'].critical_bonus *= 2
+			self.spell_abilities['Frost Nova'].critical_bonus *= 2
+			self.spell_abilities['Frostfire Bolt'].critical_bonus *= 2
 
 	def frost_2_2(self, count):
 		'''Frost Warding'''
@@ -221,8 +229,6 @@ class MageTalent():
 		assert count in (0,1,2,3)
 		for k in self.spell_amount_increase.keys():
 			self.spell_amount_increase[k] += count * 0.01
-		#self.damage_reduce['spell'] += count * 0.01
-		#self.damage_reduce['melee'] += count * 0.01
 
 	def fire_5_2(self, count):
 		'''Critical Mass'''
@@ -265,10 +271,8 @@ class MageTalent():
 		assert count in (0,1,2,3)
 		self.spell_abilities['Fireball'].direct_coefficient += count * 0.05
 		self.spell_abilities['Fireball'].periodic_coefficient += count * 0.2	# in Warmane the periodic_coefficient increased by (0.2 * count)
-
 		self.spell_abilities['Frostfire Bolt'].direct_coefficient += count * 0.05
 		self.spell_abilities['Frostfire Bolt'].periodic_coefficient += count * 0.2	# in Warmane the periodic_coefficient increased by (0.2 * count)
-
 		self.spell_abilities['Pyroblast'].direct_coefficient += count * 0.05
 		self.spell_abilities['Pyroblast'].periodic_coefficient += count * 0.2	# in Warmane the periodic_coefficient increased by (0.2 * count)
 
@@ -287,8 +291,8 @@ class MageTalent():
 	def fire_10_2(self, count):
 		'''Burnout'''
 		assert count in (0,1,2,3,4,5)
-		for k in self.spell_critical_bonus.keys():
-			self.spell_critical_bonus[k] *= 1 + count * 0.1
+		for v in self.spell_abilities.values():
+			v.critical_bonus *= 1 + count * 0.1
 
 	def fire_11_2(self, count):
 		'''Living Bomb'''
@@ -427,8 +431,8 @@ class MageTalent():
 	def arcane_10_3(self, count):
 		'''Spell Power'''
 		assert count in (0,1,2)
-		for k in self.spell_critical_bonus.keys():
-			self.spell_critical_bonus[k] *= 1 + count * 0.25
+		for v in self.spell_abilities.values():
+			v.critical_bonus *= 1 + count * 0.25
 
 	def arcane_11_2(self, count):
 		'''Arcane Barrage'''
@@ -473,7 +477,7 @@ class Mage(Attribute, MageTalent):
 		
 		# calculate amount of spells
 		for spell in self.spell_abilities.values():
-			spell.calculate_amount(self.spell_basic_attr, self.spell_critical_increase, self.spell_critical_bonus, self.spell_amount_increase)
+			spell.calculate_amount(self.spell_basic_attr, self.spell_critical_increase, self.spell_amount_increase)
 
 
 

@@ -4,7 +4,6 @@ from attribute import Attribute
 from ability import Spell_ability
 
 
-
 class WarlockTalent():
 	def __init__(self):
 		pass
@@ -123,13 +122,21 @@ class WarlockTalent():
 	
 	def affliction_9_2(self, count):
 		'''Unstable Affliction'''
-		pass
+		# below code actually implement >>Glyph of Quick Decay<< because all affliction warlock use this glyph
+		# I assume this talent-point to beidentified as >>affliction warlock<< so I choose this position to implement this
+		self.spell_abilities['Corruption'].periodic_can_haste = True
 	
 	def affliction_9_3(self, count):
 		'''Pandemic'''
 		assert count in (0, 1)
 		# todo make dot critical-able and bonus is 100% same as Shadowform
-		self.spell_abilities['Haunt'].specific_critical_bonus_increase = 0.5 * count
+		self.spell_abilities['Corruption'].critical_bonus = 1
+		self.spell_abilities['Corruption'].periodic_can_critical = True
+
+		self.spell_abilities['Unstable Affliction'].critical_bonus = 1
+		self.spell_abilities['Unstable Affliction'].periodic_can_critical = True
+
+		self.spell_abilities['Haunt'].critical_bonus *= 1 + count
 	
 	def affliction_10_2(self, count):
 		'''Everlasting Affliction'''
@@ -295,17 +302,17 @@ class WarlockTalent():
 
 	def destruction_3_3(self, count):
 		'''Ruin'''
-		self.spell_abilities['Chaos Bolt'].specific_critical_bonus_increase += 0.5 * (0.2 * count)
-		self.spell_abilities['Conflagrate'].specific_critical_bonus_increase += 0.5 * (0.2 * count)
-		self.spell_abilities['Immolate'].specific_critical_bonus_increase += 0.5 * (0.2 * count)
-		self.spell_abilities['Incinerate'].specific_critical_bonus_increase += 0.5 * (0.2 * count)
-		self.spell_abilities['Rain of Fire'].specific_critical_bonus_increase += 0.5 * (0.2 * count)
-		self.spell_abilities['Searing Pain'].specific_critical_bonus_increase += 0.5 * (0.2 * count)
-		self.spell_abilities['Shadow Bolt'].specific_critical_bonus_increase += 0.5 * (0.2 * count)
-		self.spell_abilities['Shadowburn'].specific_critical_bonus_increase += 0.5 * (0.2 * count)
-		self.spell_abilities['Shadowflame'].specific_critical_bonus_increase += 0.5 * (0.2 * count)
-		self.spell_abilities['Shadowfury'].specific_critical_bonus_increase += 0.5 * (0.2 * count)
-		self.spell_abilities['Soul Fire'].specific_critical_bonus_increase += 0.5 * (0.2 * count)
+		self.spell_abilities['Chaos Bolt'].critical_bonus *= 1 + (0.2 * count)
+		self.spell_abilities['Conflagrate'].critical_bonus *= 1 + (0.2 * count)
+		self.spell_abilities['Immolate'].critical_bonus *= 1 + (0.2 * count)
+		self.spell_abilities['Incinerate'].critical_bonus *= 1 + (0.2 * count)
+		self.spell_abilities['Rain of Fire'].critical_bonus *= 1 + (0.2 * count)
+		self.spell_abilities['Searing Pain'].critical_bonus *= 1 + (0.2 * count)
+		self.spell_abilities['Shadow Bolt'].critical_bonus *= 1 + (0.2 * count)
+		self.spell_abilities['Shadowburn'].critical_bonus *= 1 + (0.2 * count)
+		self.spell_abilities['Shadowflame'].critical_bonus *= 1 + (0.2 * count)
+		self.spell_abilities['Shadowfury'].critical_bonus *= 1 + (0.2 * count)
+		self.spell_abilities['Soul Fire'].critical_bonus *= 1 + (0.2 * count)
 
 	def destruction_4_1(self, count):
 		'''Intensity'''
@@ -437,7 +444,7 @@ class Warlock(Attribute, WarlockTalent):
 		
 		# calculate amount of spells
 		for spell in self.spell_abilities.values():
-			spell.calculate_amount(self.spell_basic_attr, self.spell_critical_increase, self.spell_critical_bonus, self.spell_amount_increase)
+			spell.calculate_amount(self.spell_basic_attr, self.spell_critical_increase, self.spell_amount_increase)
 	
 
 
