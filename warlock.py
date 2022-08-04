@@ -74,6 +74,7 @@ class WarlockTalent():
 		self.spell_abilities['Corruption'].specific_amount_increase += 0.05 * count
 		#self.spell_abilities['Seed of Corruption'].specific_amount_increase += 0.05 * count
 		self.spell_abilities['Unstable Affliction'].specific_amount_increase += 0.05 * count
+		self.spell_abilities['Unstable Affliction (dispel)'].specific_amount_increase += 0.05 * count
 
 	def affliction_5_3(self, count):
 		'''Curse of Exhaustion'''
@@ -115,6 +116,7 @@ class WarlockTalent():
 			self.spell_amount_increase[k] += 0.01 * count
 		self.spell_abilities['Corruption'].specific_critical_increase += 0.03 * count
 		self.spell_abilities['Unstable Affliction'].specific_critical_increase += 0.03 * count
+		self.spell_abilities['Unstable Affliction (dispel)'].specific_critical_increase += 0.03 * count
 
 	def affliction_9_1(self, count):
 		'''Death's Embrace'''
@@ -134,6 +136,7 @@ class WarlockTalent():
 		self.spell_abilities['Corruption'].periodic_can_critical = True
 
 		self.spell_abilities['Unstable Affliction'].critical_bonus = 1
+		self.spell_abilities['Unstable Affliction (dispel)'].critical_bonus = 1
 		self.spell_abilities['Unstable Affliction'].periodic_can_critical = True
 
 		self.spell_abilities['Haunt'].critical_bonus *= 1 + count
@@ -143,6 +146,7 @@ class WarlockTalent():
 		assert count in (0, 1, 2, 3, 4, 5)
 		self.spell_abilities['Corruption'].periodic_coefficient += 0.06 * count
 		self.spell_abilities['Unstable Affliction'].periodic_coefficient += 0.05 * count
+		self.spell_abilities['Unstable Affliction (dispel)'].direct_coefficient += 0.05 * count
 	
 	def affliction_11_2(self, count):
 		'''Haunt'''
@@ -411,8 +415,6 @@ class WarlockTalent():
 class Warlock(Attribute, WarlockTalent):
 	def __init__(self, attr_dict, talent_list):
 		self.spell_abilities = OrderedDict()
-		self.melee_abilities = OrderedDict()
-		self.range_abilities = OrderedDict()
 		with open('ability_data/warlock_abilities.csv', encoding="utf-8-sig", mode='r') as fobj:
 			content = csv.DictReader(fobj)
 			for item in content:	# every item is a dict

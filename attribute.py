@@ -108,10 +108,10 @@ class Attribute():
 
 	def _calculate_main_hand_weapon(self):
 		assert self.main_melee_weapon['type'] in ('dager', 'one_hand', 'two_hand')
-		# non_norm_weapon_dmg = base_weapon_dmg + (weapon_speed * AP / 14)
+		# non_norm_weapon_dmg = base_weapon_dmg + (weapon_speed * AP/14)
 		self.main_melee_weapon['non_norm_dmg_min'] = self.main_melee_weapon['base_dmg_min'] + (self.main_melee_weapon['speed'] * self.physic_basic_attr['melee_attack_power'] / 14)
 		self.main_melee_weapon['non_norm_dmg_max'] = self.main_melee_weapon['base_dmg_max'] + (self.main_melee_weapon['speed'] * self.physic_basic_attr['melee_attack_power'] / 14)
-		# norm_weapon_dmg = base_weapon_dmg + (norm_weapon_speed * AP / 14)
+		# norm_weapon_dmg = base_weapon_dmg + (norm_weapon_speed * AP/14)
 		if self.main_melee_weapon['type'] == 'dager':
 			norm_speed = 1.7
 		elif self.main_melee_weapon['type'] == 'one_hand':
@@ -123,10 +123,10 @@ class Attribute():
 
 	def _calculate_off_hand_weapon(self):
 		assert self.off_melee_weapon['type'] in ('dager', 'one_hand', 'two_hand')
-		# non_norm_weapon_dmg = base_weapon_dmg + (weapon_speed * AP / 14)
+		# non_norm_weapon_dmg = base_weapon_dmg + (weapon_speed * AP/14)
 		self.off_melee_weapon['non_norm_dmg_min'] = self.off_melee_weapon['base_dmg_min'] + (self.off_melee_weapon['speed'] * self.physic_basic_attr['melee_attack_power'] / 14)
 		self.off_melee_weapon['non_norm_dmg_max'] = self.off_melee_weapon['base_dmg_max'] + (self.off_melee_weapon['speed'] * self.physic_basic_attr['melee_attack_power'] / 14)
-		# norm_weapon_dmg = base_weapon_dmg + (norm_weapon_speed * AP / 14)
+		# norm_weapon_dmg = base_weapon_dmg + (norm_weapon_speed * AP/14)
 		if off_melee_weapon['type'] == 'dager':
 			norm_speed = 1.7
 		elif off_melee_weapon['type'] == 'one_hand':
@@ -139,10 +139,10 @@ class Attribute():
 
 
 	def _calculate_ranged_weapon(self):
-		# non_norm_weapon_dmg = base_weapon_dmg + (weapon_speed * AP / 14)
+		# non_norm_weapon_dmg = base_weapon_dmg + (weapon_speed * (ammo_dps + AP/14))
 		self.ranged_weapon['non_norm_dmg_min'] = self.ranged_weapon['base_dmg_min'] + (self.ranged_weapon['speed'] * (self.physic_basic_attr['ranged_attack_power'] / 14 + self.ammo_dps))
 		self.ranged_weapon['non_norm_dmg_max'] = self.ranged_weapon['base_dmg_max'] + (self.ranged_weapon['speed'] * (self.physic_basic_attr['ranged_attack_power'] / 14 + self.ammo_dps))
-		# norm_weapon_dmg = base_weapon_dmg + (norm_weapon_speed * AP / 14)
+		# norm_weapon_dmg = base_weapon_dmg + (norm_weapon_speed * (ammo_dps + AP/14))
 		self.ranged_weapon['norm_dmg_min'] = self.ranged_weapon['base_dmg_min'] + (2.8 * (self.physic_basic_attr['ranged_attack_power'] / 14 + self.ammo_dps))
 		self.ranged_weapon['norm_dmg_max'] = self.ranged_weapon['base_dmg_max'] + (2.8 * (self.physic_basic_attr['ranged_attack_power'] / 14 + self.ammo_dps))
 

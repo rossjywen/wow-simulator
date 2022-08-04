@@ -21,9 +21,9 @@ class Spell_ability():
 		self.direct_max = None	# when it is channel, this field possess tick count.
 		self._parse_direct_property()
 
-		self.periodic_total = None
-		self.periodic_duration = None
-		self.periodic_tick_count = None
+		self.periodic_total = 0
+		self.periodic_duration = 0
+		self.periodic_tick_count = 0
 		self._parse_periodic_property()
 
 		self.nature = ''
@@ -49,23 +49,23 @@ class Spell_ability():
 		self.critical_bonus = 0.5
 
 		# below are based on calculation
-		self._actual_cast_time = None
-		self._final_increase = None
-		self._final_critical = None
-		self._amount_noncritical_direct_min = None
-		self._amount_noncritical_direct_max = None		# if direct it is max, if channel it is per-tick.
-		self._amount_critical_direct_min = None
-		self._amount_critical_direct_max = None			# if direct it is max, if channel it is per-tick.
-		self._amount_average_direct_min = None
-		self._amount_average_direct_max = None			# if direct it is max, if channel it is per-tick.
-		self._amount_ps_direct_min = None
-		self._amount_ps_direct_max = None				# if direct it is max, if channel it is per-tick.
-		self._amount_noncritical_total_periodic = None
-		self._amount_noncritical_tick_periodic = None
-		self._amount_critical_total_periodic = None
-		self._amount_critical_tick_periodic = None
-		self._periodic_duration = 1000
-		self._periodic_duration_tick = 100
+		self._actual_cast_time = 0
+		self._final_increase = 0
+		self._final_critical = 0
+		self._amount_noncritical_direct_min = 0
+		self._amount_noncritical_direct_max = 0		# if direct it is max, if channel it is per-tick.
+		self._amount_critical_direct_min = 0
+		self._amount_critical_direct_max = 0			# if direct it is max, if channel it is per-tick.
+		self._amount_average_direct_min = 0
+		self._amount_average_direct_max = 0			# if direct it is max, if channel it is per-tick.
+		self._amount_ps_direct_min = 0
+		self._amount_ps_direct_max = 0				# if direct it is max, if channel it is per-tick.
+		self._amount_noncritical_total_periodic = 0
+		self._amount_noncritical_tick_periodic = 0
+		self._amount_critical_total_periodic = 0
+		self._amount_critical_tick_periodic = 0
+		self._periodic_duration = 0
+		self._periodic_duration_tick = 0
 		
 	
 
@@ -287,8 +287,8 @@ class Physic_ability():
 		self.ap_coefficient = None
 		self.ap_const = None
 		self.periodic_const = None
-		self.periodic_duration = None
-		self.periodic_tick_count = None
+		self.periodic_duration = 0
+		self.periodic_tick_count = 0
 		
 		self._parse_property()
 		

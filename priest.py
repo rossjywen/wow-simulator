@@ -414,8 +414,6 @@ class Priest(Attribute, PriestTalent):
 	def __init__(self, attr_dict, talent_list):
 		# initialize all spells
 		self.spell_abilities = OrderedDict()
-		self.melee_abilities = OrderedDict()
-		self.range_abilities = OrderedDict()
 		with open('ability_data/priest_abilities.csv', encoding="utf-8-sig", mode='r') as fobj:
 			content = csv.DictReader(fobj)
 			for item in content:	# every item is a dict
