@@ -306,6 +306,7 @@ class WarlockTalent():
 
 	def destruction_3_3(self, count):
 		'''Ruin'''
+		assert count in (0, 1, 2, 3, 4, 5)
 		self.spell_abilities['Chaos Bolt'].critical_bonus *= 1 + (0.2 * count)
 		self.spell_abilities['Conflagrate'].critical_bonus *= 1 + (0.2 * count)
 		self.spell_abilities['Immolate'].critical_bonus *= 1 + (0.2 * count)
@@ -381,10 +382,10 @@ class WarlockTalent():
 	def destruction_8_2(self, count):
 		'''Shadow and Flame'''
 		assert count in (0, 1, 2, 3, 4, 5)
-		self.spell_abilities['Shadow Bolt'].direct_coefficient += 0.8571 * (0.04 * count)
-		self.spell_abilities['Shadowburn'].direct_coefficient += 0.4286 * (0.04 * count)
-		self.spell_abilities['Chaos Bolt'].direct_coefficient += 0.7142 * (0.04 * count)
-		self.spell_abilities['Incinerate'].direct_coefficient += 0.7142 * (0.04 * count)
+		self.spell_abilities['Shadow Bolt'].direct_coefficient *= 1 + 0.04 * count
+		self.spell_abilities['Shadowburn'].direct_coefficient *= 1 + 0.04 * count
+		self.spell_abilities['Chaos Bolt'].direct_coefficient *= 1 + 0.04 * count
+		self.spell_abilities['Incinerate'].direct_coefficient *= 1 + 0.04 * count
 
 	def destruction_8_3(self, count):
 		'''Improved Soul Leech'''
