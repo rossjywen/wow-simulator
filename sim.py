@@ -84,7 +84,7 @@ if __name__ == '__main__':
 			print('attribute json file not found.')
 			sys.exit(1)
 
-		charactor = Mage(attribute, talent_list)
+		character = Mage(attribute, talent_list)
 	
 	elif p_class == 'priest':
 		try:
@@ -105,7 +105,7 @@ if __name__ == '__main__':
 			print('attribute json file not found.')
 			sys.exit(1)
 
-		charactor = Priest(attribute, talent_list)
+		character = Priest(attribute, talent_list)
 	
 	elif p_class == 'warlock':
 		try:
@@ -126,7 +126,7 @@ if __name__ == '__main__':
 			print('attribute json file not found.')
 			sys.exit(1)
 
-		charactor = Warlock(attribute, talent_list)
+		character = Warlock(attribute, talent_list)
 			
 	elif p_class == 'hunter':
 		try:
@@ -147,40 +147,34 @@ if __name__ == '__main__':
 			print('attribute json file not found.')
 			sys.exit(1)
 	
-		charactor = Hunter(attribute, talent_list)
+		character = Hunter(attribute, talent_list)
 
 	else:
 		pass
 	
 
-	print(charactor)
+	print(character)
 
-	if hasattr(charactor, 'spell_abilities'):
+	if hasattr(character, 'spell_abilities'):
 		spell_csv = list()
-		for s in charactor.spell_abilities.values():
+		for s in character.spell_abilities.values():
 			#print(s)
 			item = dict()
 			item['name'] = s.spell_name
 			item['cast time'] = '{:.2f}'.format(s._actual_cast_time)
-			item['amount increase'] = '{:.2f}'.format(s._final_increase)
+			item['amount increase'] = '{:.6f}'.format(s._final_increase)
 			item['critical'] = '{:.2f}'.format(s._final_critical)
 			item['critical bonus'] = s.critical_bonus
 			# --- direct ---
-			item['direct non-crit min'] = '{:.0f}'.format(s._amount_noncritical_direct_min)
-			item['direct non-crit max'] = '{:.0f}'.format(s._amount_noncritical_direct_max)
-			#item['crit direct min'] = '{:.0f}'.format(s._amount_critical_direct_min)
-			#item['crit direct max'] = '{:.0f}'.format(s._amount_critical_direct_max)
-			item['direct average min'] = '{:.0f}'.format(s._amount_average_direct_min)
-			item['direct average max'] = '{:.0f}'.format(s._amount_average_direct_max)
+			item['[D] non-crit'] = '{:.0f} - {:.0f}'.format(s._amount_noncritical_direct_min, s._amount_noncritical_direct_max)
+			item['[D] crit'] = '{:.0f} - {:.0f}'.format(s._amount_critical_direct_min, s._amount_critical_direct_max)
+			#item['[D] average'] = '{:.0f} - {:.0f}'.format(s._amount_average_direct_min, s._amount_average_direct_max)
 			# --- periodic ---
-			item['periodic duration'] = '{:.2f}'.format(s._periodic_duration)
-			item['periodic tick count'] = '{:.0f}'.format(s.periodic_tick_count)
-			item['periodic non-crit total'] = '{:.0f}'.format(s._amount_noncritical_total_periodic)
-			item['periodic non-crit per-tick'] = '{:.0f}'.format(s._amount_noncritical_tick_periodic)
+			item['[P] duration/count/tick'] = '{:.2f} / {:.0f} / {:.2f}'.format(s._periodic_duration, s.periodic_tick_count, s._periodic_duration_tick)
 			if s.periodic_can_critical == True:
-				item['periodic crit per-tick'] = '{:.0f}'.format(s._amount_critical_tick_periodic)
+				item['[P] total-tick-tick(crit)'] = '{:.0f} / {:.0f} / {:.0f}'.format(s._amount_noncritical_total_periodic, s._amount_noncritical_tick_periodic, s._amount_critical_tick_periodic)
 			else:
-				item['periodic crit per-tick'] = '{:.0f}'.format(s._amount_noncritical_tick_periodic)
+				item['[P] total-tick-tick(crit)'] = '{:.0f} / {:.0f} / {:.0f}'.format(s._amount_noncritical_total_periodic, s._amount_noncritical_tick_periodic, s._amount_noncritical_tick_periodic)
 			spell_csv.append(item)
 
 		with open('{}_spell_log.csv'.format(p_class), 'w', encoding='utf-8', newline='') as f:
@@ -188,21 +182,19 @@ if __name__ == '__main__':
 			writer.writeheader()
 			writer.writerows(spell_csv)
 
-	if hasattr(charactor, 'physic_abilities'):
+	if hasattr(character, 'physic_abilities'):
 		physic_csv = list()
-		for s in charactor.physic_abilities.values():
+		for s in character.physic_abilities.values():
+			#print(s)
 			item = dict()
 			item['name'] = s.physic_name
-			item['amount increase'] = '{:.2f}'.format(s._final_increase)
+			item['amount increase'] = '{:.6f}'.format(s._final_increase)
 			item['critical'] = '{:.2f}'.format(s._final_critical)
 			item['critical bonus'] = '{:.2f}'.format(s.critical_bonus)
-			item['direct non-crit min'] = '{:.0f}'.format(s._amount_noncritical_direct_min)
-			item['direct non-crit max'] = '{:.0f}'.format(s._amount_noncritical_direct_max)
-			item['direct crit min'] = '{:.0f}'.format(s._amount_critical_direct_min)
-			item['direct crit max'] = '{:.0f}'.format(s._amount_critical_direct_max)
-			item['periodic total'] = '{:.0f}'.format(s._periodic_total)
-			item['periodic per-tick'] = '{:.0f}'.format(s._periodic_tick)
-			item['periodic per-tick duration'] = '{:.0f}'.format(s._periodic_tick_time)
+			item['[D] non-crit'] = '{:.0f} - {:.0f}'.format(s._amount_noncritical_direct_min, s._amount_noncritical_direct_max)
+			item['[D] crit'] = '{:.0f} - {:.0f}'.format(s._amount_critical_direct_min, s._amount_critical_direct_max)
+			item['[P] duration/count/tick'] = '{:.0f} / {:.0f} / {:.0f}'.format(s.periodic_duration, s.periodic_tick_count, s._periodic_tick_time)
+			item['[P] total-tick'] = '{:.0f} - {:.0f}'.format(s._periodic_total, s._periodic_tick)
 			#item[''] = '{:.2f}'.format(s.)
 			#item[''] = '{:.2f}'.format(s.)
 			physic_csv.append(item)

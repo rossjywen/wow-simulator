@@ -26,6 +26,7 @@ class Attribute():
 
 		
 		self.spell_critical_increase = OrderedDict()
+		self.spell_critical_increase['absorb'] = 0  
 		self.spell_critical_increase['frost'] = 0  
 		self.spell_critical_increase['fire'] = 0
 		self.spell_critical_increase['arcane'] = 0
@@ -34,6 +35,8 @@ class Attribute():
 		self.spell_critical_increase['nature'] = 0
 
 		self.spell_amount_increase = OrderedDict()
+		self.spell_amount_increase['all'] = 0
+		self.spell_amount_increase['absorb'] = 0
 		self.spell_amount_increase['frost'] = 0
 		self.spell_amount_increase['fire'] = 0
 		self.spell_amount_increase['arcane'] = 0

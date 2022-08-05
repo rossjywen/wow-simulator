@@ -88,7 +88,9 @@ class WarlockTalent():
 	def affliction_6_2(self, count):
 		'''Shadow Mastery'''
 		assert count in (0, 1, 2, 3, 4, 5)
-		self.spell_amount_increase['shadow'] += 0.03 * count
+		for spell in self.spell_abilities.values():
+			if spell.school == 'shadow' and spell.nature == 'dmg':
+				spell.specific_amount_increase += 0.03 * count
 
 	def affliction_7_1(self, count):
 		'''Eradiction'''
@@ -112,8 +114,8 @@ class WarlockTalent():
 	def affliction_8_3(self, count):
 		'''Malediction'''
 		assert count in (0, 1, 2, 3)
-		for k in self.spell_amount_increase.keys():
-			self.spell_amount_increase[k] += 0.01 * count
+		self.spell_amount_increase['all'] += 0.01 * count
+
 		self.spell_abilities['Corruption'].specific_critical_increase += 0.03 * count
 		self.spell_abilities['Unstable Affliction'].specific_critical_increase += 0.03 * count
 		self.spell_abilities['Unstable Affliction (dispel)'].specific_critical_increase += 0.03 * count
@@ -131,7 +133,6 @@ class WarlockTalent():
 	def affliction_9_3(self, count):
 		'''Pandemic'''
 		assert count in (0, 1)
-		# todo make dot critical-able and bonus is 100% same as Shadowform
 		self.spell_abilities['Corruption'].critical_bonus = 1
 		self.spell_abilities['Corruption'].periodic_can_critical = True
 
@@ -285,7 +286,7 @@ class WarlockTalent():
 		'''Aftermath'''
 		assert count in (0, 1, 2, 3)
 		self.spell_abilities['Immolate'].specific_amount_increase += 0.03 * count
-		# todo in fact, this talent increase the dot-portion of Immolate, I will fix this later.
+		# todo in fact, this talent only increase the dot-portion of Immolate, I will fix this later.
 
 	def destruction_2_2(self, count):
 		'''Molten Skin'''
@@ -419,12 +420,7 @@ class Warlock(Attribute, WarlockTalent):
 		with open('ability_data/warlock_abilities.csv', encoding="utf-8-sig", mode='r') as fobj:
 			content = csv.DictReader(fobj)
 			for item in content:	# every item is a dict
-				if item['ability_type'] == 'magic':
-					self.spell_abilities[item['ability_name']] = Spell_ability(item)
-				elif item['ability_type'] == 'melee':
-					pass	# todo melee_ability
-				elif item['ability_type'] == 'range':
-					pass	# todo range_ability
+				self.spell_abilities[item['ability_name']] = Spell_ability(item)
 		
 		# initialize attribute
 		Attribute.__init__(self, attr_dict)

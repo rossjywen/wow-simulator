@@ -74,12 +74,12 @@ class Spell_ability():
 		self._calculate_final(attr_basic, attr_critical_increase, attr_increase)
 
 		if self.direct == True:				# need to calculate direct part
-			self._amount_noncritical_direct_min = (self.direct_min + attr_basic['spell_power'] * self.direct_coefficient) * (1 + self._final_increase)
+			self._amount_noncritical_direct_min = (self.direct_min + attr_basic['spell_power'] * self.direct_coefficient) * self._final_increase
 			self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
 			self._amount_average_direct_min = self._amount_noncritical_direct_min * (1 - self._final_critical) + self._amount_critical_direct_min * self._final_critical
 			self._amount_ps_direct_min = self._amount_noncritical_direct_min / self._actual_cast_time
 			if self.channel == False:		# direct spell
-				self._amount_noncritical_direct_max = (self.direct_max + attr_basic['spell_power'] * self.direct_coefficient) * (1 + self._final_increase)
+				self._amount_noncritical_direct_max = (self.direct_max + attr_basic['spell_power'] * self.direct_coefficient) * self._final_increase
 				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 				self._amount_average_direct_max = self._amount_noncritical_direct_max * (1 - self._final_critical) + self._amount_critical_direct_max * self._final_critical
 				self._amount_ps_direct_max = self._amount_noncritical_direct_max / self._actual_cast_time
@@ -89,14 +89,14 @@ class Spell_ability():
 				self._amount_average_direct_max = self._amount_average_direct_min / self.direct_max
 				self._amount_ps_direct_max = self._amount_ps_direct_min / self.direct_max
 		if self.periodic == True:			# need to calculate periodic part
-			self._amount_noncritical_total_periodic = (self.periodic_total + attr_basic['spell_power'] * self.periodic_coefficient) * (1 + self._final_increase)
+			self._amount_noncritical_total_periodic = (self.periodic_total + attr_basic['spell_power'] * self.periodic_coefficient) * self._final_increase
 			self._amount_noncritical_tick_periodic = self._amount_noncritical_total_periodic / self.periodic_tick_count
 			self._amount_critical_total_periodic = self._amount_noncritical_total_periodic * (1 + self.critical_bonus)
 			self._amount_critical_tick_periodic = self._amount_critical_total_periodic / self.periodic_tick_count
 
 	
 	def _calculate_final(self, attr_basic, attr_critical_increase, attr_increase):
-		self._final_increase = attr_increase[self.school] + self.specific_amount_increase
+		self._final_increase = (1 + self.specific_amount_increase + attr_increase[self.school]) * (1 + attr_increase['all'])
 		self._final_critical = attr_basic['spell_critical'] + attr_critical_increase[self.school] + self.specific_critical_increase
 
 
@@ -135,8 +135,6 @@ class Spell_ability():
 		attrs = self.spell_attribute_tags.split('-')
 		for att_item in attrs:
 			#print(att_item)
-			# dmg heal absorb direct channel dot hot hybrid aoe effect fixed
-			# now I cancel the tag 'absorb'
 			if att_item == 'dmg':
 				self.nature = 'dmg'
 			elif att_item == 'heal':
@@ -166,9 +164,10 @@ class Spell_ability():
 
 	def _calculate_coefficient(self):
 		if self.fixed == True:
+			# dmg heal absorb direct channel dot hot hybrid aoe effect fixed
 			#if self.nature == 'absorb':
 			#	self.direct_coefficient = float(self.database_coefficient)
-			#else:
+			#el
 			if self.direct == True and self.periodic == True:
 				tmp = self.database_coefficient.split('-')
 				self.direct_coefficient = float(tmp[0])
