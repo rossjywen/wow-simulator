@@ -75,12 +75,12 @@ class PriestTalent():
 		'''Focus Power'''
 		assert count in (0, 1, 2)
 		# todo need fix all-dmg need add 'absorb'
-		for spell in self.spell_abilities.values():
-			if spell.nature == 'heal':
-				spell.specific_amount_increase += 0.02 * count
+		self.spell_amount_increase['all_dmg'] += 0.02 * count
+		self.spell_amount_increase['all_heal'] += 0.02 * count
 
 	def discipline_6_3(self, count):
 		'''Enlightenment'''
+		# todo it is not addition on 'spell_haste'
 		assert count in (0, 1, 2, 3)
 		self.spell_basic_attr['spell_haste'] += 0.02 * count
 
@@ -278,7 +278,9 @@ class PriestTalent():
 	def shadow_1_3(self, count):
 		'''Darkness'''
 		assert count in (0, 1, 2, 3, 4, 5)
-		self.spell_amount_increase['shadow'] += 0.02 * count
+		for sp in self.spell_abilities.values():
+			if sp.school == 'shadow':
+				sp.specific_amount_increase += 0.02 * count
 
 	def shadow_2_1(self, count):
 		'''Shadow Affinity'''
@@ -361,7 +363,6 @@ class PriestTalent():
 
 			self.spell_abilities['Shadow Word: Pain'].critical_bonus = 1
 			self.spell_abilities['Shadow Word: Pain'].periodic_can_critical = True
-			self.spell_abilities['Shadow Word: Pain'].periodic_can_haste = True
 
 			self.spell_abilities['Devouring Plague'].critical_bonus = 1
 			self.spell_abilities['Devouring Plague'].periodic_can_critical = True 

@@ -1,9 +1,9 @@
 ability_name,ability_type,ability_attribute_tags,weapon_property,attackpower_property,school
 Arcane Shot,ranged,ap-direct,,0.15-492,arcane
-Volley,ranged,ap-dot,,0.5022-2118-6-6,arcane
+Volley,ranged,ap-direct,,0.0837-353,arcane
 Serpent Sting,ranged,ap-dot,,0.2-1210-15-5,nature
 Black Arrow,ranged,ap-dot,,0.1-2765-15-5,shdow
-Explosive Shot,ranged,ap-dot,,0.42-1275-3-3,fire
+Explosive Shot,ranged,ap-direct,,0.14-425,fire
 Scatter Shot,ranged,wp-nonnorm,ranged-0.5-0,,physical
 Aimed Shot,ranged,wp-norm,ranged-1-408,,physical
 Steady Shot,ranged,wp-base-ap-direct,ranged-1-308,0.1-252,physical

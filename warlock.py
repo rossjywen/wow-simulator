@@ -114,7 +114,7 @@ class WarlockTalent():
 	def affliction_8_3(self, count):
 		'''Malediction'''
 		assert count in (0, 1, 2, 3)
-		self.spell_amount_increase['all'] += 0.01 * count
+		self.spell_amount_increase['all_damage'] += 0.01 * count
 
 		self.spell_abilities['Corruption'].specific_critical_increase += 0.03 * count
 		self.spell_abilities['Unstable Affliction'].specific_critical_increase += 0.03 * count

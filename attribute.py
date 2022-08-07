@@ -35,7 +35,8 @@ class Attribute():
 		self.spell_critical_increase['nature'] = 0
 
 		self.spell_amount_increase = OrderedDict()
-		self.spell_amount_increase['all'] = 0
+		self.spell_amount_increase['all_dmg'] = 0
+		self.spell_amount_increase['all_heal'] = 0
 		self.spell_amount_increase['absorb'] = 0
 		self.spell_amount_increase['frost'] = 0
 		self.spell_amount_increase['fire'] = 0

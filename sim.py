@@ -163,7 +163,7 @@ if __name__ == '__main__':
 			item['name'] = s.spell_name
 			item['cast time'] = '{:.2f}'.format(s._actual_cast_time)
 			item['amount increase'] = '{:.6f}'.format(s._final_increase)
-			item['critical'] = '{:.2f}'.format(s._final_critical)
+			item['critical'] = '{:.4f}'.format(s._final_critical)
 			item['critical bonus'] = s.critical_bonus
 			# --- direct ---
 			item['[D] non-crit'] = '{:.0f} - {:.0f}'.format(s._amount_noncritical_direct_min, s._amount_noncritical_direct_max)
@@ -189,7 +189,7 @@ if __name__ == '__main__':
 			item = dict()
 			item['name'] = s.physic_name
 			item['amount increase'] = '{:.6f}'.format(s._final_increase)
-			item['critical'] = '{:.2f}'.format(s._final_critical)
+			item['critical'] = '{:.4f}'.format(s._final_critical)
 			item['critical bonus'] = '{:.2f}'.format(s.critical_bonus)
 			item['[D] non-crit'] = '{:.0f} - {:.0f}'.format(s._amount_noncritical_direct_min, s._amount_noncritical_direct_max)
 			item['[D] crit'] = '{:.0f} - {:.0f}'.format(s._amount_critical_direct_min, s._amount_critical_direct_max)

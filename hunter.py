@@ -203,10 +203,7 @@ class HunterTalent():
 			inc = 0.03
 		elif count == 3:
 			inc = 0.05
-
-		for sp_key, sp_val in self.physic_abilities.items():
-			if sp_val.physic_type == 'ranged':
-				self.physic_abilities[sp_key].specific_amount_increase += inc 
+		self.physic_amount_increase['ranged'] += inc
 
 	def marksmanship_7_1(self, count):
 		'''Piercing Shots'''
