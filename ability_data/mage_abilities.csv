@@ -5,7 +5,7 @@ Cone of Cold,magic,dmg-direct-aoe-effect,0,709-776,,frost,0.2036
 Frostfire Bolt,magic,dmg-hybrid-fixed,3,722-838,90-9-3,frost,0.8571-0
 Blizzard,magic,dmg-channel-aoe,8,3408-8,,frost,1.1429
 Frost Nova,magic,dmg-direct-aoe-effect,0,368-419,,frost,0.1936
-Ice Barrier,magic,heal-direct-fixed,0,3300-3300,,frost,0.8053
+Ice Barrier,magic,absorb-direct-fixed,0,3300-3300,,absorb,0.8053
 Arcane Blast,magic,dmg-direct,2.5,1185-1377,,arcane,0.7143
 Arcane Missile,magic,dmg-channel,5,1800-5,,arcane,1.4286
 Arcane Explosion,magic,dmg-direct-aoe,0,538-582,,arcane,0.2143
