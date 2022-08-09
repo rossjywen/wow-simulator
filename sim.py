@@ -10,6 +10,7 @@ from mage import Mage
 from priest import Priest
 from warlock import Warlock
 from hunter import Hunter
+from DK import DK
 
 
 def print_usage():
@@ -42,7 +43,7 @@ def parse_arg(args):
 				print_usage()
 				sys.exit(0)
 			elif opt in ('-c', '--class'):
-				if arg in ('mage', 'warlock', 'priest', 'hunter'):
+				if arg in ('mage', 'warlock', 'priest', 'hunter', 'DK'):
 					p_class = arg
 				else:
 					print('the class not supported yet or in wrong format')
@@ -148,6 +149,28 @@ if __name__ == '__main__':
 			sys.exit(1)
 	
 		character = Hunter(attribute, talent_list)
+	
+	elif p_class == 'DK':
+		try:
+			with open(p_talent) as fobj:
+				jsc = fobj.read()
+				talent_list = json.loads(jsc)
+		except FileNotFoundError:
+			print('talent json file not found.')
+			sys.exit(1)
+
+		try:
+			with open(p_attribute, encoding='utf-8-sig', mode='r') as fobj:
+				content = csv.DictReader(fobj)
+				for attribute in content:
+					print(attribute)
+					print('')
+		except FileNotFoundError:
+			print('attribute json file not found.')
+			sys.exit(1)
+	
+		character = DK(attribute, talent_list)
+
 
 	else:
 		pass

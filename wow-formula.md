@@ -679,7 +679,52 @@ aoe技能必然是一个直接的(direct)法术，如牧师的`治疗祷言`；�
 
 ## 3.4 护甲穿透(ArP)
 
+最开始我理解的护甲穿透就是按照面板上的tootip中的减少护甲的比例乘以目标的护甲，直到我使用了满破的猎人测试发现不是这个情况，我才找到了护甲穿透真实的工作方法。
 
+首先在80级版本，护甲穿透等级(Armor penetration rating)和tooltip中的比例换算的公式是
+
+> $ ArP_{ratio} = ArP_{rating}/14$
+>
+> 每14点护甲穿透等级 = 1%的护甲减少
+
+我找到的英文的资料如下
+
+> Quote from: Ghostcrawler
+>
+> *Okay, here is a fairly technical explanation we put together for how armor pen works.*
+>
+> *We didn’t want Armor Penetration Rating to be too powerful against low armor targets, like it had been in BC. We also didn’t want Armor Penetration Rating to be too powerful against high armor targets.*
+
+我猜测上面的信息是来自暴雪的设计人员的解释，就是说在wlk中，他们设计的ArP希望运行的机制并不是对所有的人物都一样，在TBC中ArP对于布甲表现的太过强势；而同样的也不想对护甲很高的角色杀伤力太高。
+
+> *So, we decided on a system where there is a cap on how much armor the Armor Penetration Rating can be applied to. So, the first X armor on the target is reduced by the percentage listed in the Armor Penetration Rating tooltip, and all armor past that X is unaffected. Another way of understanding that is we multiply the percentage in the tooltip times the minimum of the two values: the cap, and the amount of armor on the target after all other modifiers.*
+
+显然这样就需要设计一个数学公式来限制这个效果，在这个数学公式中，能计算出ArP减少护甲的比例能==作用到的==最多的护甲值，这个值称之为cap，这个cap的存在能达到上面设计的思路和效果，这个公式如下
+
+> cap = "(armor + C) / 3" 和 armor 两者比较的最小的值
+>
+> armor是当前角色的护甲值，C是一个常数，根据目标等级计算得出，C的计算公式如下
+>
+> ```
+> If (targetlevel < 60)
+>    C = 400 + 85 * targetlevel
+> Else
+>    C = 400 + 85 * targetlevel + 4.5 * 85 * (targetlevel - 59);
+> ```
+
+在PVP中，玩家等级都是80，根据上面的公式，计算得出 C=15232.5，==这个值用在护甲减少物理伤害公式中==。
+
+那么举个例子，一个牧师8000护甲，对于这个牧师来说
+
+> armor = 8000
+>
+> (armor + C) / 3 = 7744
+>
+> cap是上面两者中的较小的值 所以取7744
+
+这个时候比如我的猎人满破的能忽略100%护甲，这个"忽略100%护甲"的效果只能作用在这个牧师的7744的护甲上，所以忽略了7744 * 100% = 7744护甲，所以在这个猎人造成的物理伤害的过程中，这个牧师的护甲相当于是8000 - 7744 = 256.
+
+从公式其实可以了解到，要想armor > (armor + C) / 3那么护甲就要高于7616.5，==也就是说，在护甲值低于7616.5的情况下，ArP可以完全做用于护甲，一旦目标的护甲值高于7616.5就不可能完全忽略目标的护甲值==
 
 # 4. 补充信息
 
@@ -692,6 +737,8 @@ aoe技能必然是一个直接的(direct)法术，如牧师的`治疗祷言`；�
 护甲值提供对物理伤害的减伤效果，公式如下(仅提供80级pvp相关)
 
 >  $Reduction = Armor / (Armor + 15232.5)$
+
+15232.5这个数是怎么来的 详见 *护甲穿透(ArP)*
 
 ---
 
@@ -846,13 +893,19 @@ aoe技能必然是一个直接的(direct)法术，如牧师的`治疗祷言`；�
 
 # 6. 代码命令及附带工具
 
+## 测试各职业的命令
+
 **法师**
 
 冰法pvp
 
 > python3 sim.py --class=mage --talent=talent_data/mage_frost_pvp.json --attribute=attribute_data/mage_s8_frost.csv
 
+火法pvp
 
+> python3 sim.py --class=mage --talent=talent_data/mage_fire_pvp.json --attribute=attribute_data/mage_s8_fire.csv
+
+---
 
 **牧师**
 
@@ -864,7 +917,7 @@ aoe技能必然是一个直接的(direct)法术，如牧师的`治疗祷言`；�
 
 > python3 sim.py --class=priest --talent=talent_data/priest_disc_solo.json --attribute=attribute_data/priest_s8_disc_haste.csv
 
-
+---
 
 **术士**
 
@@ -876,7 +929,7 @@ aoe技能必然是一个直接的(direct)法术，如牧师的`治疗祷言`；�
 
 > python3 sim.py --class=warlock --talent=talent_data/warlock_affliction_pvp.json --attribute=attribute_data/warlock_s8.csv
 
-
+---
 
 **猎人**
 
@@ -884,7 +937,13 @@ aoe技能必然是一个直接的(direct)法术，如牧师的`治疗祷言`；�
 
 > python3 sim.py --class=hunter --talent=talent_data/hunter_mm_pvp.json --attribute=attribute_data/hunter_T10_mm.csv
 
+---
 
+**DK**
+
+> python3 sim.py --class=DK --talent=talent_data/DK_unholy_pvp.json --attribute=attribute_data/DK_s8.csv
+
+## excel天赋dump成json的命令
 
 > ./dump_from_excel.py --input=WOW-talents.xlsx --page=no-talent --start=a2 --end=l12 --type=list > no_talent.json
 
