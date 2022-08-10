@@ -1,0 +1,7 @@
+ability_name,ability_type,ability_attribute_tags,weapon_property,attackpower_property,school,specialty_tags
+Divine Storm,melee,wp-norm,main-1.1-0,,physical,retribution
+Crusader Strike,melee,wp-norm,main-0.75-0,,physical,retribution
+Exorcism,melee,ap-direct,,0.15-0,holy,all
+Avenger's Shield,melee,ap-direct,,0.07-0,holy,protection
+Consecration,melee,ap-dot,,0.32-0-8-8,holy,all
+Holy Shield,melee,ap-direct,,0.056-0,holy,protection

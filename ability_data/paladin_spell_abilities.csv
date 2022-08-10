@@ -1,0 +1,11 @@
+ability_name,ability_type,ability_attribute_tags,panel_cast_time,direct_property,periodic_property,school,database_coefficient,specilty_tags
+Flash of Light,spell,heal-direct,1.5,788-883,,holy,1,all
+Holy Light,spell,heal-direct,2.5,4888-5444,,holy,1.66,all
+Holy Shock (heal),spell,heal-direct,0,2641-2859,,holy,0.8057,holy
+Sacred Shield,spell,absorb-direct,0,500-500,,absorb,0.76,all
+Holy Shock (dmg),spell,dmg-direct,0,1296-1402,,holy,0.4286,holy
+Exorcism,spell,dmg-direct-fixed,1.5,1028-1146,,holy,0.15,all
+Hammer of Wrath,spell,dmg-direct-fixed,0,1139-1257,,holy,0.15,all
+Avenger's Shield,spell,dmg-direct-fixed,0,1100-1344,,holy,0.07,protection
+Consecration,spell,dmg-dot-fixed,0,,904-8-8,holy,0.32,all
+Holy Shield,spell,dmg-direct-fixed,0,274-274,,holy,0.09,protection
