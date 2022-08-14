@@ -947,6 +947,12 @@ aoe技能必然是一个直接的(direct)法术，如牧师的`治疗祷言`；�
 
 > python3 sim.py --class=DK --talent=talent_data/DK_unholy_pvp.json --attribute=attribute_data/DK_s8.csv
 
+**圣骑士**
+
+奶骑
+
+> python3 sim.py --class=paladin --talent=talent_data/paladin_holy_pvp.json  --attribute=attribute_data/paladin_s8_holy.csv
+
 ## excel天赋dump成json的命令
 
 > ./dump_from_excel.py --input=WOW-talents.xlsx --page=no-talent --start=a2 --end=l12 --type=list > no_talent.json
