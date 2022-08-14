@@ -1,17 +1,18 @@
-﻿ability_name,ability_type,ability_attribute_tags,weapon_property,attackpower_property,school,specialty_tag,note
-Frost Fever,melee,ap-dot,,0.275-0-15-5,frost,all,
-Blood Plague,melee,ap-dot,,0.3125-0-15-5,shadow,all,
-Death and Decay,melee,ap-dot,,0.4805-620-10-10,shadow,all,
-Death Coil (dmg),melee,ap-direct,,0.15-443,shadow,all,
-Death Coil (heal),melee,heal-ap-direct,,0.225-664,shadow,all,
-Blood Boil,melee,ap-direct,,0.04-200,shadow,all,
-Corpse Explosion,melee,ap-direct,,0.105-443,shadow,unholy,
-Icy Touch,melee,ap-direct,,0.1-236,frost,all,
-Howling Blast,melee,ap-direct,,0.15-540,frost,frost,
-Frost Strike,melee,wp-norm,main-0.55-138,,frost,frost,
-Plague Strike,melee,wp-norm,main-0.5-189,,physical,all,
-Death Strike,melee,wp-norm,main-0.75-223,,physical,all,
-Obliterate,melee,wp-norm,main-0.8-467,,physical,frost,
-Rune Strike,melee,wp-norm-ap-direct,main-1.5-0,0.15-0,physical,all,
-Scourge Strike,melee,wp-norm,main-0.7-560,,physical,unholy,
-Anti-Magic Zone,melee,absorb-ap-direct,,10-0,absorb,unholy,
+﻿ability_name,ability_type,ability_attribute_tags,weapon_property,attackpower_property,school,specialty_tag
+Frost Fever,melee,ap-dot,,0.315-150-15-5,frost,all
+Blood Plague,melee,ap-dot,,0.315-180-15-5,shadow,all
+Death and Decay,melee,ap-dot,,0.48-620-10-10,shadow,all
+Death Coil (dmg),melee,ap-direct,,0.15-443-443,shadow,all
+Death Coil (heal),melee,heal-ap-direct,,0.225-664-664,absorb,all
+Blood Boil,melee,ap-direct,,0.06-180-220,shadow,all
+Corpse Explosion,melee,ap-direct,,0.8726-443-443,shadow,unholy
+Icy Touch,melee,ap-direct,,0.1-227-245,frost,all
+Howling Blast,melee,ap-direct,,0.15-518-562,frost,frost
+Frost Strike,melee,wp-norm,main-0.55-138-138,,frost,frost
+Plague Strike,melee,wp-norm,main-0.5-189-189,,physical,all
+Death Strike,melee,wp-norm,main-0.75-223-223,,physical,all
+Obliterate,melee,wp-norm,main-0.8-467-467,,physical,frost
+Rune Strike,melee,wp-norm-ap-direct,main-1.5-0-0,0.15-0-0,physical,all
+Scourge Strike,melee,wp-norm,main-0.7-560-560,,physical,unholy
+Anti-Magic Zone,melee,absorb-ap-direct,,10-0-0,absorb,unholy
+

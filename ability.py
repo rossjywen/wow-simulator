@@ -288,9 +288,11 @@ class Physic_ability():
 		
 		self.wp_hand = None
 		self.wp_coefficient = None
-		self.wp_const = None
+		self.wp_const_min = None
+		self.wp_const_max = None
 		self.ap_coefficient = None
-		self.ap_const = None
+		self.ap_const_min = None
+		self.ap_const_max = None
 		self.periodic_const = None
 		self.periodic_duration = 0
 		self.periodic_tick_count = 0
@@ -300,7 +302,10 @@ class Physic_ability():
 		# below are based on talent modification
 		self.specific_amount_increase = 0
 		self.specific_critical_increase = 0
-		self.critical_bonus = 1
+		if self.wp == True or self.ap_direct == True:	# according to wow-wiki
+			self.critical_bonus = 1 					# 100% bonus physical damage that occurs as a result of an attack made with melee or ranged weapons
+		else:
+			self.critical_bonus = 0.5
 		
 		# below are based on calculation
 		self._final_increase = 0
@@ -344,13 +349,15 @@ class Physic_ability():
 			tmp = self.weapon_property.split('-')
 			self.wp_hand = tmp[0]
 			self.wp_coefficient = float(tmp[1])
-			self.wp_const = int(tmp[2])
+			self.wp_const_min = int(tmp[2])
+			self.wp_const_max = int(tmp[3])
 
 		if self.ap == True:
 			if self.ap_direct == True:
 				tmp = self.attackpower_property.split('-')
 				self.ap_coefficient = float(tmp[0])
-				self.ap_const = int(tmp[1])
+				self.ap_const_min = int(tmp[1])
+				self.ap_const_max = int(tmp[2])
 			elif self.ap_dot == True:
 				tmp = self.attackpower_property.split('-')
 				self.ap_coefficient = float(tmp[0])
@@ -361,9 +368,9 @@ class Physic_ability():
 
 	def _calculate_final(self, attr_basic, attr_amount_increase):
 		if self.wp == True or self.ap_direct == True:
-			self._final_increase = (1 + self.specific_amount_increase) * (1 + attr_amount_increase[self.physic_type])
+			self._final_increase = (1 + self.specific_amount_increase) * (1 + attr_amount_increase[self.school]) * (1 + attr_amount_increase[self.physic_type])
 		else:
-			self._final_increase = 1 + self.specific_amount_increase
+			self._final_increase = (1 + self.specific_amount_increase) * (1 + attr_amount_increase[self.school])
 		
 		if self.physic_type == 'melee':
 			self._final_critical = attr_basic['melee_critical'] + self.specific_critical_increase
@@ -377,35 +384,35 @@ class Physic_ability():
 			# weapon part
 			if self.wp_nonnorm == True:
 				if self.wp_hand == 'main':
-					self._amount_noncritical_direct_min = (main_melee_weapon['non_norm_dmg_min'] * self.wp_coefficient + self.wp_const) * self._final_increase
-					self._amount_noncritical_direct_max = (main_melee_weapon['non_norm_dmg_max'] * self.wp_coefficient + self.wp_const) * self._final_increase
+					self._amount_noncritical_direct_min = (main_melee_weapon['non_norm_dmg_min'] * self.wp_coefficient + self.wp_const_min) * self._final_increase
+					self._amount_noncritical_direct_max = (main_melee_weapon['non_norm_dmg_max'] * self.wp_coefficient + self.wp_const_max) * self._final_increase
 				elif self.wp_hand == 'off':
-					self._amount_noncritical_direct_min = (off_melee_weapon['non_norm_dmg_min'] * self.wp_coefficient + self.wp_const) * self._final_increase
-					self._amount_noncritical_direct_max = (off_melee_weapon['non_norm_dmg_max'] * self.wp_coefficient + self.wp_const) * self._final_increase
+					self._amount_noncritical_direct_min = (off_melee_weapon['non_norm_dmg_min'] * self.wp_coefficient + self.wp_const_min) * self._final_increase
+					self._amount_noncritical_direct_max = (off_melee_weapon['non_norm_dmg_max'] * self.wp_coefficient + self.wp_const_max) * self._final_increase
 				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
 				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			elif self.wp_norm == True:
 				if self.wp_hand == 'main':
-					self._amount_noncritical_direct_min = (main_melee_weapon['norm_dmg_min'] * self.wp_coefficient + self.wp_const) * self._final_increase
-					self._amount_noncritical_direct_max = (main_melee_weapon['norm_dmg_max'] * self.wp_coefficient + self.wp_const) * self._final_increase
+					self._amount_noncritical_direct_min = (main_melee_weapon['norm_dmg_min'] * self.wp_coefficient + self.wp_const_min) * self._final_increase
+					self._amount_noncritical_direct_max = (main_melee_weapon['norm_dmg_max'] * self.wp_coefficient + self.wp_const_max) * self._final_increase
 				elif self.wp_hand == 'off':
-					self._amount_noncritical_direct_min = (off_melee_weapon['norm_dmg_min'] * self.wp_coefficient + self.wp_const) * self._final_increase
-					self._amount_noncritical_direct_max = (off_melee_weapon['norm_dmg_max'] * self.wp_coefficient + self.wp_const) * self._final_increase
+					self._amount_noncritical_direct_min = (off_melee_weapon['norm_dmg_min'] * self.wp_coefficient + self.wp_const_min) * self._final_increase
+					self._amount_noncritical_direct_max = (off_melee_weapon['norm_dmg_max'] * self.wp_coefficient + self.wp_const_max) * self._final_increase
 				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
 				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			elif self.wp_base == True:
 				if self.wp_hand == 'main':
-					self._amount_noncritical_direct_min = (main_melee_weapon['base_dmg_min'] * self.wp_coefficient + self.wp_const) * self._final_increase
-					self._amount_noncritical_direct_max = (main_melee_weapon['base_dmg_max'] * self.wp_coefficient + self.wp_const) * self._final_increase
+					self._amount_noncritical_direct_min = (main_melee_weapon['base_dmg_min'] * self.wp_coefficient + self.wp_const_min) * self._final_increase
+					self._amount_noncritical_direct_max = (main_melee_weapon['base_dmg_max'] * self.wp_coefficient + self.wp_const_max) * self._final_increase
 				elif self.wp_hand == 'off':
-					self._amount_noncritical_direct_min = (off_melee_weapon['base_dmg_min'] * self.wp_coefficient + self.wp_const) * self._final_increase
-					self._amount_noncritical_direct_max = (off_melee_weapon['base_dmg_max'] * self.wp_coefficient + self.wp_const) * self._final_increase
+					self._amount_noncritical_direct_min = (off_melee_weapon['base_dmg_min'] * self.wp_coefficient + self.wp_const_min) * self._final_increase
+					self._amount_noncritical_direct_max = (off_melee_weapon['base_dmg_max'] * self.wp_coefficient + self.wp_const_max) * self._final_increase
 				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
 				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			# attackpower part
 			if self.ap_direct == True:
-				self._amount_noncritical_direct_min += (attr_basic['melee_attack_power'] * self.ap_coefficient + self.ap_const) * self._final_increase
-				self._amount_noncritical_direct_max += (attr_basic['melee_attack_power'] * self.ap_coefficient + self.ap_const) * self._final_increase
+				self._amount_noncritical_direct_min += (attr_basic['melee_attack_power'] * self.ap_coefficient + self.ap_const_min) * self._final_increase
+				self._amount_noncritical_direct_max += (attr_basic['melee_attack_power'] * self.ap_coefficient + self.ap_const_max) * self._final_increase
 				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
 				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			elif self.ap_dot == True:
@@ -415,24 +422,24 @@ class Physic_ability():
 		elif self.physic_type == 'ranged':	# ranged weapon is unique, not like melee weapon.
 			# weapon part
 			if self.wp_nonnorm == True:
-				self._amount_noncritical_direct_min = (ranged_weapon['non_norm_dmg_min'] * self.wp_coefficient + self.wp_const) * self._final_increase
-				self._amount_noncritical_direct_max = (ranged_weapon['non_norm_dmg_max'] * self.wp_coefficient + self.wp_const) * self._final_increase
+				self._amount_noncritical_direct_min = (ranged_weapon['non_norm_dmg_min'] * self.wp_coefficient + self.wp_const_min) * self._final_increase
+				self._amount_noncritical_direct_max = (ranged_weapon['non_norm_dmg_max'] * self.wp_coefficient + self.wp_const_max) * self._final_increase
 				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
 				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			elif self.wp_norm == True:
-				self._amount_noncritical_direct_min = (ranged_weapon['norm_dmg_min'] * self.wp_coefficient + self.wp_const) * self._final_increase
-				self._amount_noncritical_direct_max = (ranged_weapon['norm_dmg_max'] * self.wp_coefficient + self.wp_const) * self._final_increase
+				self._amount_noncritical_direct_min = (ranged_weapon['norm_dmg_min'] * self.wp_coefficient + self.wp_const_min) * self._final_increase
+				self._amount_noncritical_direct_max = (ranged_weapon['norm_dmg_max'] * self.wp_coefficient + self.wp_const_max) * self._final_increase
 				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
 				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			elif self.wp_base == True:
-				self._amount_noncritical_direct_min = (ranged_weapon['base_dmg_min'] * self.wp_coefficient + self.wp_const) * self._final_increase
-				self._amount_noncritical_direct_max = (ranged_weapon['base_dmg_max'] * self.wp_coefficient + self.wp_const) * self._final_increase
+				self._amount_noncritical_direct_min = (ranged_weapon['base_dmg_min'] * self.wp_coefficient + self.wp_const_min) * self._final_increase
+				self._amount_noncritical_direct_max = (ranged_weapon['base_dmg_max'] * self.wp_coefficient + self.wp_const_max) * self._final_increase
 				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
 				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			# attackpower part
 			if self.ap_direct == True:
-				self._amount_noncritical_direct_min +=  (attr_basic['ranged_attack_power'] * self.ap_coefficient + self.ap_const) * self._final_increase
-				self._amount_noncritical_direct_max +=  (attr_basic['ranged_attack_power'] * self.ap_coefficient + self.ap_const) * self._final_increase
+				self._amount_noncritical_direct_min +=  (attr_basic['ranged_attack_power'] * self.ap_coefficient + self.ap_const_min) * self._final_increase
+				self._amount_noncritical_direct_max +=  (attr_basic['ranged_attack_power'] * self.ap_coefficient + self.ap_const_max) * self._final_increase
 				self._amount_critical_direct_min = self._amount_noncritical_direct_min * (1 + self.critical_bonus)
 				self._amount_critical_direct_max = self._amount_noncritical_direct_max * (1 + self.critical_bonus)
 			elif self.ap_dot == True:

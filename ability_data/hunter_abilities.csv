@@ -1,13 +1,13 @@
-ability_name,ability_type,ability_attribute_tags,weapon_property,attackpower_property,school
-Arcane Shot,ranged,ap-direct,,0.15-492,arcane
-Volley,ranged,ap-direct,,0.0837-353,arcane
-Serpent Sting,ranged,ap-dot,,0.2-1210-15-5,nature
-Black Arrow,ranged,ap-dot,,0.1-2765-15-5,shdow
-Explosive Shot,ranged,ap-direct,,0.14-425,fire
-Scatter Shot,ranged,wp-nonnorm,ranged-0.5-0,,physical
-Aimed Shot,ranged,wp-norm,ranged-1-408,,physical
-Steady Shot,ranged,wp-base-ap-direct,ranged-1-308,0.1-252,physical
-Kill Shot,ranged,wp-norm,ranged-2-783,,physical
-Multi Shot,ranged,wp-norm,ranged-1-408,,physical
-Chimera Shot,ranged,wp-norm,ranged-1.25-0,,physical
-Silencing Shot,ranged,wp-nonnorm,ranged-0.5-0,,physical
+ability_name,ability_type,ability_attribute_tags,weapon_property,attackpower_property,school,specialty_tags
+Arcane Shot,ranged,ap-direct,,0.15-492-492,arcane,all
+Volley,ranged,ap-direct,,0.0837-353-353,arcane,all
+Serpent Sting,ranged,ap-dot,,0.2-1210-15-5,nature,all
+Black Arrow,ranged,ap-dot,,0.1-2765-15-5,shadow,survival
+Explosive Shot,ranged,ap-direct,,0.14-386-464,fire,survival
+Scatter Shot,ranged,wp-nonnorm,ranged-0.5-0-0,,physical,marksmanship-survival
+Aimed Shot,ranged,wp-norm,ranged-1-408-408,,physical,all
+Steady Shot,ranged,wp-base-ap-direct,ranged-1-0-0,0.1-252-252,physical,all
+Kill Shot,ranged,wp-norm-ap-direct,ranged-2-0-0,0.4-650-650,physical,all
+Multi Shot,ranged,wp-norm,ranged-1-408-408,,physical,all
+Chimera Shot,ranged,wp-norm,ranged-1.25-0-0,,nature,marksmanship
+Silencing Shot,ranged,wp-nonnorm,ranged-0.5-0-0,,physical,marksmanship

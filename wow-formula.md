@@ -937,6 +937,10 @@ aoe技能必然是一个直接的(direct)法术，如牧师的`治疗祷言`；�
 
 > python3 sim.py --class=hunter --talent=talent_data/hunter_mm_pvp.json --attribute=attribute_data/hunter_T10_mm.csv
 
+射击猎人(s8)
+
+> python3 sim.py --class=hunter --talent=talent_data/hunter_mm_pvp.json  --attribute=attribute_data/hunter_s8.csv
+
 ---
 
 **DK**

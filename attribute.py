@@ -73,8 +73,21 @@ class Attribute():
 			print('ranged critical does not exist')
 
 		self.physic_amount_increase = OrderedDict()
-		self.physic_amount_increase['melee'] = 0
-		self.physic_amount_increase['ranged'] = 0
+		self.physic_amount_increase['all_dmg'] = 0
+
+		self.physic_amount_increase['melee'] = 0	# for melee weapon
+		self.physic_amount_increase['ranged'] = 0	# for ranged weapon
+
+		self.physic_amount_increase['physical'] = 0
+		
+		self.physic_amount_increase['absorb'] = 0
+
+		self.physic_amount_increase['frost'] = 0
+		self.physic_amount_increase['fire'] = 0
+		self.physic_amount_increase['arcane'] = 0
+		self.physic_amount_increase['holy'] = 0
+		self.physic_amount_increase['shadow'] = 0
+		self.physic_amount_increase['nature'] = 0
 
 		
 		self.main_melee_weapon = OrderedDict()
@@ -157,11 +170,14 @@ class Attribute():
 		for k, c in self.spell_basic_attr.items():
 			ret_str += '|-{0}:{1}\n'.format(k, c)
 		ret_str += '\n'
+		ret_str += '[spell amount increase]:\n'
+		for k, c in self.spell_amount_increase.items():
+			ret_str += '|-{0}:{1}\n'.format(k, c)
+		ret_str += '\n'
 		ret_str += '[spell critical increase]:\n'
 		for k, c in self.spell_critical_increase.items():
 			ret_str += '|-{0}:{1}\n'.format(k, c)
 		ret_str += '\n'
-		ret_str += '[spell critical bonus]:\n'
 
 		# ---------- physic part ----------
 		ret_str += '[physic basic attribute]:\n'
@@ -178,6 +194,10 @@ class Attribute():
 		ret_str += '\n'
 		ret_str += '[ranged weapon attribute]:\n'
 		for k, c in self.ranged_weapon.items():
+			ret_str += '|-{0}:{1}\n'.format(k, c)
+		ret_str += '\n'
+		ret_str += '[physic amount increase]:\n'
+		for k, c in self.physic_amount_increase.items():
 			ret_str += '|-{0}:{1}\n'.format(k, c)
 		ret_str += '\n'
 

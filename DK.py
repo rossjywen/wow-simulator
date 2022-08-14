@@ -153,9 +153,8 @@ class DKTalent():
 	def frost_2_3(self, count):
 		'''Black Ice'''
 		assert count in (0, 1, 2, 3, 4, 5)
-		for sp_k, sp_v in self.physic_abilities.items():
-			if sp_v.school == 'frost' or sp_v.school == 'shadow':
-				self.physic_abilities[sp_k].specific_amount_increase += 0.02 * count
+		self.physic_amount_increase['frost'] += 0.02 * count
+		self.physic_amount_increase['shadow'] += 0.02 * count
 
 	def frost_2_4(self, count):
 		'''Nerves of Cold Steel'''
@@ -347,9 +346,9 @@ class DKTalent():
 	def unholy_5_2(self, count):
 		'''Impurity'''
 		assert count in (0, 1, 2, 3, 4, 5)
-		for v in self.physic_abilities.values():
-			if v.ap == True:
-				v.ap_coefficient *= 1 + 0.04 * count
+		for ab in self.physic_abilities.values():
+			if ab.ap == True:
+				ab.ap_coefficient *= 1 + 0.04 * count
 
 	def unholy_5_3(self, count):
 		'''Dirge'''
@@ -425,6 +424,7 @@ class DK(Attribute, DKTalent):
 			content = csv.DictReader(fobj)
 			for item in content:	# every item is a dict
 				self.physic_abilities[item['ability_name']] = Physic_ability(item)
+				self.physic_abilities[item['ability_name']].critical_bonus = 1	# DK positibe ability [Runic Focus]
 		
 		# initialize attribute
 		Attribute.__init__(self, attr_dict)
