@@ -947,11 +947,37 @@ aoe技能必然是一个直接的(direct)法术，如牧师的`治疗祷言`；�
 
 > python3 sim.py --class=DK --talent=talent_data/DK_unholy_pvp.json --attribute=attribute_data/DK_s8.csv
 
+---
+
 **圣骑士**
 
 奶骑
 
 > python3 sim.py --class=paladin --talent=talent_data/paladin_holy_pvp.json  --attribute=attribute_data/paladin_s8_holy.csv
+
+---
+
+**盗贼**
+
+敏锐(穿pvp散装)
+
+> python3 sim.py --class=rogue --talent=talent_data/rogue_subtlety_pvp.json --attribute=attribute_data/rogue_s8_pvp.csv
+
+敏锐(穿pve散装)
+
+> python3 sim.py --class=rogue --talent=talent_data/rogue_subtlety_pvp.json --attribute=attribute_data/rogue_s8_pve.csv
+
+刺杀(穿pvp散装)
+
+> python3 sim.py --class=rogue --talent=talent_data/rogue_assassination_pvp.json --attribute=attribute_data/rogue_s8_pvp.csv
+
+---
+
+**战士**
+
+武器战
+
+> 
 
 ## excel天赋dump成json的命令
 

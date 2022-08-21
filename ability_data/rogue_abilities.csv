@@ -1,0 +1,14 @@
+ability_name,ability_type,ability_attribute_tags,weapon_property,attackpower_property,school
+Ambush,melee,wp-norm,main-2.75-908-908,,physical
+Backstab,melee,wp-norm,main-1.5-465-465,,physical
+Hemorrhage,melee,wp-norm,main-1.6-0-0,,physical
+Mutilate (main),melee,wp-norm,main-1-181-181,,physical
+Mutilate (off),melee,wp-norm,off-1-181-181,,physical
+Sinister Strike,melee,wp-norm,main-1-180-180,,physical
+Shive,melee,wp-norm,off-1-0-0,,physical
+Eviscerate (min),melee,ap-direct,,0.15-1977-1977,physical
+Eviscerate (max),melee,ap-direct,,0.35-2231-2231,physical
+Envenom,melee,ap-direct,,0.45-1075-1075,nature
+Garrote,melee,ap-dot,,0.42-714-18-6,physical
+Rupture,melee,ap-dot,,0.3-1736-16-8,physical
+Gouge,melee,ap-direct,,0.21-1-1,physical

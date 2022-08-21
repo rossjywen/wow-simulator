@@ -104,8 +104,8 @@ class Attribute():
 			tmp = attribute_info['off_melee_weapon'].split('-')
 			self.off_melee_weapon['type'] = tmp[0]
 			self.off_melee_weapon['speed'] = float(tmp[1])
-			self.off_melee_weapon['base_dmg_min'] = int(tmp[2])
-			self.off_melee_weapon['base_dmg_max'] = int(tmp[3])
+			self.off_melee_weapon['base_dmg_min'] = int(tmp[2]) / 2
+			self.off_melee_weapon['base_dmg_max'] = int(tmp[3]) / 2
 			self._calculate_off_hand_weapon()
 		
 		self.ranged_weapon = OrderedDict()
@@ -141,17 +141,17 @@ class Attribute():
 	def _calculate_off_hand_weapon(self):
 		assert self.off_melee_weapon['type'] in ('dager', 'one_hand', 'two_hand')
 		# non_norm_weapon_dmg = base_weapon_dmg + (weapon_speed * AP/14)
-		self.off_melee_weapon['non_norm_dmg_min'] = self.off_melee_weapon['base_dmg_min'] + (self.off_melee_weapon['speed'] * self.physic_basic_attr['melee_attack_power'] / 14)
-		self.off_melee_weapon['non_norm_dmg_max'] = self.off_melee_weapon['base_dmg_max'] + (self.off_melee_weapon['speed'] * self.physic_basic_attr['melee_attack_power'] / 14)
+		self.off_melee_weapon['non_norm_dmg_min'] = self.off_melee_weapon['base_dmg_min'] + (self.off_melee_weapon['speed'] * self.physic_basic_attr['melee_attack_power'] / 14) / 2
+		self.off_melee_weapon['non_norm_dmg_max'] = self.off_melee_weapon['base_dmg_max'] + (self.off_melee_weapon['speed'] * self.physic_basic_attr['melee_attack_power'] / 14) / 2
 		# norm_weapon_dmg = base_weapon_dmg + (norm_weapon_speed * AP/14)
-		if off_melee_weapon['type'] == 'dager':
+		if self.off_melee_weapon['type'] == 'dager':
 			norm_speed = 1.7
-		elif off_melee_weapon['type'] == 'one_hand':
+		elif self.off_melee_weapon['type'] == 'one_hand':
 			norm_speed = 2.4
-		elif off_melee_weapon['type'] == 'two_head':
+		elif self.off_melee_weapon['type'] == 'two_head':
 			norm_speed = 3.3
-		self.off_melee_weapon['norm_dmg_min'] = self.off_melee_weapon['base_dmg_min'] + (norm_speed * self.physic_basic_attr['melee_attack_power'] / 14)
-		self.off_melee_weapon['norm_dmg_max'] = self.off_melee_weapon['base_dmg_max'] + (norm_speed * self.physic_basic_attr['melee_attack_power'] / 14)
+		self.off_melee_weapon['norm_dmg_min'] = self.off_melee_weapon['base_dmg_min'] + (norm_speed * self.physic_basic_attr['melee_attack_power'] / 14) / 2
+		self.off_melee_weapon['norm_dmg_max'] = self.off_melee_weapon['base_dmg_max'] + (norm_speed * self.physic_basic_attr['melee_attack_power'] / 14) / 2
 
 
 

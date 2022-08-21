@@ -18,7 +18,8 @@ class RogueTalent():
 			inc = 0.07 * count
 		elif count == 3:
 			inc = 0.2
-		self.physic_abilities['Eviscerate'].specific_amount_increase += inc
+		self.physic_abilities['Eviscerate (min)'].specific_amount_increase += inc
+		self.physic_abilities['Eviscerate (max)'].specific_amount_increase += inc
 
 	def assassination_1_2(self, count):
 		'''Remorseless Attacks'''
@@ -26,7 +27,7 @@ class RogueTalent():
 
 	def assassination_1_3(self, count):
 		'''Malice'''
-		# todo check if panel info will change
+		# this talent modify panel info so don't need to implement
 		pass
 
 	def assassination_2_1(self, count):
@@ -43,7 +44,8 @@ class RogueTalent():
 		'''Puncturing Wounds'''
 		assert count in (0, 1, 2, 3)
 		self.physic_abilities['Backstab'].specific_critical_increase += 0.1 * count
-		self.physic_abilities['Mutilate'].specific_critical_increase += 0.05 * count
+		self.physic_abilities['Mutilate (main)'].specific_critical_increase += 0.05 * count
+		self.physic_abilities['Mutilate (off)'].specific_critical_increase += 0.05 * count
 
 	def assassination_3_1(self, count):
 		'''Vigor'''
@@ -55,13 +57,23 @@ class RogueTalent():
 
 	def assassination_3_3(self, count):
 		'''Lethality'''
-		# todo increase critical bonus of some abilities
-		pass
+		assert count in (0, 1, 2, 3, 4, 5)
+		self.physic_abilities['Backstab'].critical_bonus *= 1 + 0.06 * count
+		self.physic_abilities['Hemorrhage'].critical_bonus *= 1 + 0.06 * count
+		self.physic_abilities['Mutilate (main)'].critical_bonus *= 1 + 0.06 * count
+		self.physic_abilities['Mutilate (off)'].critical_bonus *= 1 + 0.06 * count
+		self.physic_abilities['Sinister Strike'].critical_bonus *= 1 + 0.06 * count
+		self.physic_abilities['Gouge'].critical_bonus *= 1 + 0.06 * count
 
 	def assassination_4_2(self, count):
 		'''Vile Poisons'''
-		# todo poison damage
-		pass
+		# also increase poison damage
+		assert count in (0, 1, 2, 3)
+		if count <= 2:
+			inc = 0.07 * count
+		elif count == 3:
+			inc = 0.2
+		self.physic_abilities['Envenom'].specific_amount_increase += inc
 
 	def assassination_4_3(self, count):
 		'''Improved Poisons'''
@@ -90,8 +102,7 @@ class RogueTalent():
 	def assassination_6_3(self, count):
 		'''Murder'''
 		assert count in (0, 1, 2)
-		self.physic_amount_increase['melee'] += 0.02 * count
-		self.physic_amount_increase['ranged'] += 0.02 * count
+		self.physic_amount_increase['all_dmg'] += 0.02 * count
 
 	def assassination_7_1(self, count):
 		'''Deadly Brew'''
@@ -145,9 +156,12 @@ class RogueTalent():
 
 	def combat_1_3(self, count):
 		'''Dual Wield Specialization'''
-		# todo offhand weapon damage
-		pass
-
+		# I suppose the 'base_dmg' of weapon does not need to be modified
+		assert count in (0, 1, 2, 3, 4, 5)
+		self.off_melee_weapon['non_norm_dmg_min'] *= 1 + 0.1 * count
+		self.off_melee_weapon['non_norm_dmg_max'] *= 1 + 0.1 * count
+		self.off_melee_weapon['norm_dmg_min'] *= 1 + 0.1 * count
+		self.off_melee_weapon['norm_dmg_max'] *= 1 + 0.1 * count
 	def combat_2_1(self, count):
 		'''Improved Slice and Dice'''
 		pass
@@ -170,7 +184,6 @@ class RogueTalent():
 
 	def combat_3_3(self, count):
 		'''Close Quarters Combat'''
-		# todo critical with dagers and fist
 		pass
 
 	def combat_4_1(self, count):
@@ -191,11 +204,11 @@ class RogueTalent():
 		assert count in (0, 1, 2, 3, 4)
 		self.physic_abilities['Sinister Strike'].specific_amount_increase += 0.03 * count
 		self.physic_abilities['Backstab'].specific_amount_increase += 0.03 * count
-		self.physic_abilities['Eviscerate'].specific_amount_increase += 0.03 * count
+		self.physic_abilities['Eviscerate (min)'].specific_amount_increase += 0.03 * count
+		self.physic_abilities['Eviscerate (max)'].specific_amount_increase += 0.03 * count
 
 	def combat_5_1(self, count):
 		'''Mace Specialization'''
-		# todo equivalent to add ArP
 		pass
 
 	def combat_5_2(self, count):
@@ -273,7 +286,8 @@ class RogueTalent():
 		'''Opportunity'''
 		assert count in (0, 1, 2)
 		self.physic_abilities['Backstab'].specific_amount_increase += 0.1 * count
-		self.physic_abilities['Mutilate'].specific_amount_increase += 0.1 * count
+		self.physic_abilities['Mutilate (main)'].specific_amount_increase += 0.1 * count
+		self.physic_abilities['Mutilate (off)'].specific_amount_increase += 0.1 * count
 		self.physic_abilities['Garrote'].specific_amount_increase += 0.1 * count
 		self.physic_abilities['Ambush'].specific_amount_increase += 0.1 * count
 
@@ -325,7 +339,6 @@ class RogueTalent():
 
 	def subtlety_5_3(self, count):
 		'''Dirty Deeds'''
-		# todo what is special abilities?
 		pass
 
 	def subtlety_5_4(self, count):
@@ -354,8 +367,10 @@ class RogueTalent():
 
 	def subtlety_8_2(self, count):
 		'''Sinister Calling'''
-		# todo what is 'damage bonus'?
-		pass
+		# due to test, 'damage bonus' is wp_coefficient
+		assert count in (0, 1, 2, 3, 4, 5)
+		self.physic_abilities['Backstab'].wp_coefficient += 0.03 * count
+		self.physic_abilities['Hemorrhage'].wp_coefficient += 0.03 * count
 
 	def subtlety_8_3(self, count):
 		'''Waylay'''
@@ -376,8 +391,7 @@ class RogueTalent():
 	def subtlety_10_2(self, count):
 		'''Slaughter from the Shadows'''
 		assert count in (0, 1, 2, 3, 4, 5)
-		self.physic_amount_increase['melee'] += 0.01 * count
-		self.physic_amount_increase['ranged'] += 0.01 * count
+		self.physic_amount_increase['all_dmg'] += 0.01 * count
 
 	def subtlety_11_2(self, count):
 		'''Shadowdance'''

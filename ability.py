@@ -372,6 +372,9 @@ class Physic_ability():
 		else:
 			self._final_increase = (1 + self.specific_amount_increase) * (1 + attr_amount_increase[self.school])
 		
+		if self.nature == 'dmg':
+			self._final_increase *= 1 + attr_amount_increase['all_dmg']
+		
 		if self.physic_type == 'melee':
 			self._final_critical = attr_basic['melee_critical'] + self.specific_critical_increase
 		elif self.physic_type == 'ranged':
