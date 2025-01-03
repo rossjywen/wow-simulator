@@ -1,0 +1,15 @@
+ability_name,ability_type,ability_attribute_tags,weapon_property,attackpower_property,school
+Rend,melee,wp-nonnorm,main-1-380-380,,physical
+Mortal Strike,melee,wp-norm,main-1-380-380,,physical
+Overpower,melee,wp-norm,main-1-0-0,,physical
+Heroic Strike,melee,wp-nonnorm,main-1-495-495,,physical
+Devastate,melee,wp-norm,main-1.2-242-242,,physical
+Slam,melee,wp-norm,main-1-250-250,,physical
+Cleave,melee,wp-nonnorm,main-1-222-222,,physical
+Whirlwind,melee,wp-norm,main-1-0-0,,physical
+Heroic Throw,melee,ap-direct,,0.5-12-12,physical
+Revenge,melee,ap-direct,,0.31-1636-1998,physical
+Shield Slam,melee,ap-direct,,0-990-1040,physical
+Execute,melee,ap-direct,,0.2-1456-2026,physical
+Thunder Clap,melee,ap-direct,,0.12-300-300,physical
+Shattering Throw,melee,ap-direct,,0.5-12-12,physical

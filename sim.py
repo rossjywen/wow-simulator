@@ -13,6 +13,7 @@ from hunter import Hunter
 from DK import DK
 from paladin import Paladin
 from rogue import Rogue
+from warrior import Warrior
 
 
 def print_usage():
@@ -36,26 +37,31 @@ def parse_arg(args):
 		print_usage()
 		sys.exit(1)
 	else:
-		parse, remaining = getopt.getopt(args[1:],'hc:t:a:',['help', 'class=', 'talent=', 'attribute='])
-		#print(parse)
-		if len(remaining) > 0:
-			print('unknown parameter: ' + str(remaining))
-		for opt, arg in parse:
-			if opt in ('-h', '--help'):
-				print_usage()
-				sys.exit(0)
-			elif opt in ('-c', '--class'):
-				if arg in ('mage', 'warlock', 'priest', 'hunter', 'DK', 'paladin', 'rogue'):
-					p_class = arg
-				else:
-					print('the class not supported yet or in wrong format')
-					print('currently supported class 1.mage 2.priest 3.warlock 4.hunter')
+		try:
+			parse, remaining = getopt.getopt(args[1:],'hc:t:a:',['help', 'class=', 'talent=', 'attribute='])
+			#print(parse)
+			if len(remaining) > 0:
+				print('unknown parameter: ' + str(remaining))
+			for opt, arg in parse:
+				if opt in ('-h', '--help'):
 					print_usage()
 					sys.exit(1)
-			elif opt in ('-t', '--talent'):
-				p_talent = arg
-			elif opt in ('-a', '--attribute'):
-				p_attribute = arg
+				elif opt in ('-c', '--class'):
+					if arg in ('mage', 'warlock', 'priest', 'rogue', 'hunter', 'paladin', 'DK', 'warrior'):
+						p_class = arg
+					else:
+						print('the class not supported yet or in wrong format')
+						print('currently supported class 1.mage 2.warlock 3.priest 4. 5.rogue 6.hunter 7.shaman 8.paladin 9.DK 10.warrior')
+						print_usage()
+						sys.exit(1)
+				elif opt in ('-t', '--talent'):
+					p_talent = arg
+				elif opt in ('-a', '--attribute'):
+					p_attribute = arg
+		except getopt.GetoptError:
+			print('found error in parameters analysis')
+			print_usage()
+			sys.exit(1)
 	if p_class == '' or p_talent == '' or p_attribute == '':
 		print('necessary parameter is needed, see usage.')
 		print_usage()
@@ -214,7 +220,27 @@ if __name__ == '__main__':
 			sys.exit(1)
 	
 		character = Rogue(attribute, talent_list)
+	
+	elif p_class == 'warrior':
+		try:
+			with open(p_talent) as fobj:
+				jsc = fobj.read()
+				talent_list = json.loads(jsc)
+		except FileNotFoundError:
+			print('talent json file not found.')
+			sys.exit(1)
 
+		try:
+			with open(p_attribute, encoding='utf-8-sig', mode='r') as fobj:
+				content = csv.DictReader(fobj)
+				for attribute in content:
+					print(attribute)
+					print('')
+		except FileNotFoundError:
+			print('attribute json file not found.')
+			sys.exit(1)
+	
+		character = Warrior(attribute, talent_list)
 
 	else:
 		pass

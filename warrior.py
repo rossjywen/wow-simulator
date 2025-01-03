@@ -65,7 +65,7 @@ class WarriorTalent():
 	def arms_5_1(self, count):
 		'''Poleaxe Specialization'''
 		self.physic_basic_attr['melee_critical'] += 0.01 * count
-		self.physic_basic_attr['ranged_critical'] += 0.01 * count
+		#self.physic_basic_attr['ranged_critical'] += 0.01 * count
 		# increase critical hit damage I just modify critical_bonus
 		# todo will check influence what ability
 
