@@ -18,10 +18,13 @@ class ShamanTalent():
 		assert count in (0, 1, 2, 3, 4, 5)
 		self.spell_abilities['Lightning Bolt'].specific_amount_increase += 0.01 * count
 		self.spell_abilities['Chain Lightning'].specific_amount_increase += 0.01 * count
-		self.spell_abilities['Thunderstorm'].specific_amount_increase += 0.01 * count
+		# 2025/01/04 the database didn't provide the coefficient for Thunderstorm
+		#self.spell_abilities['Thunderstorm'].specific_amount_increase += 0.01 * count
 		self.spell_abilities['Lava Burst'].specific_amount_increase += 0.01 * count
-		# todo shocks
-		#self.spell_abilities[''].specific_amount_increase += 0.01 * count
+		self.spell_abilities['Flame Shock (direct)'].specific_amount_increase += 0.01 * count
+		self.spell_abilities['Flame Shock (dot)'].specific_amount_increase += 0.01 * count
+		self.spell_abilities['Frost Shock'].specific_amount_increase += 0.01 * count
+		self.spell_abilities['Earth Shock'].specific_amount_increase += 0.01 * count
 
 	def elemental_2_1(self, count):
 		'''Call of Flame'''
@@ -68,7 +71,7 @@ class ShamanTalent():
 		assert count in (0, 1)
 		self.spell_abilities['Lightning Bolt'].specific_critical_increase += 0.05 * count
 		self.spell_abilities['Chain Lightning'].specific_critical_increase += 0.05 * count
-		self.spell_abilities['Thunderstorm'].specific_critical_increase += 0.05 * count
+		#self.spell_abilities['Thunderstorm'].specific_critical_increase += 0.05 * count
 
 	def elemental_5_4(self, count):
 		'''Unrelenting Storm'''
@@ -80,7 +83,7 @@ class ShamanTalent():
 
 	def elemental_6_3(self, count):
 		'''Lightning Mastery'''
-		assert count in (0, 1, 2, 3)
+		assert count in (0, 1, 2, 3, 4, 5)
 		self.spell_abilities['Lightning Bolt'].modified_panel_cast_time -= 0.1 * count
 		self.spell_abilities['Chain Lightning'].modified_panel_cast_time -= 0.1 * count
 		self.spell_abilities['Lava Burst'].modified_panel_cast_time -= 0.1 * count
@@ -93,13 +96,14 @@ class ShamanTalent():
 		'''Storm, Earth and Fire'''
 		# todo periodic part dmg inc
 		assert count in (0, 1, 2, 3)
-		self.spell_abilities['Flame Shock'].specific_amount_increase += 0.2 * count
+		self.spell_abilities['Flame Shock (direct)'].specific_amount_increase += 0.2 * count
+		self.spell_abilities['Flame Shock (dot)'].specific_amount_increase += 0.2 * count
 
 	def elemental_8_1(self, count):
 		'''Booming Echoes'''
 		# todo direct part dmg inc
 		assert count in (0, 1, 2)
-		self.spell_abilities['Flame Shock'].specific_amount_increase += 0.1 * count
+		self.spell_abilities['Flame Shock (direct)'].specific_amount_increase += 0.1 * count
 		self.spell_abilities['Frost Shock'].specific_amount_increase += 0.1 * count
 
 	def elemental_8_2(self, count):
@@ -155,8 +159,9 @@ class ShamanTalent():
 		assert count in (0, 1, 2, 3, 4, 5)
 		for ab in self.spell_abilities.values():
 			ab.specific_critical_increase += 0.01 * count
-		for ab in self.physic_abilities.values():
-			ab.specific_critical_increase += 0.01 * count
+		# 2025/01/04 commented out
+		#for ab in self.physic_abilities.values():
+		#	ab.specific_critical_increase += 0.01 * count
 
 	def enhancement_2_3(self, count):
 		'''Improved Ghost Wolf'''
@@ -391,11 +396,14 @@ class Shaman(Attribute, ShamanTalent):
 			for item in content:	# every item is a dict
 				self.spell_abilities[item['ability_name']] = Spell_ability(item)
 
-		self.physic_abilities = OrderedDict()
-		with open('ability_data/shaman_physic_abilities.csv', encoding="utf-8-sig", mode='r') as fobj:
-			content = csv.DictReader(fobj)
-			for item in content:	# every item is a dict
-				self.physic_abilities[item['ability_name']] = Physic_ability(item)
+		# 2025/01/04
+		# commented out this section of code
+		# because the database didn't provide coefficients for enhancement shaman abilities
+		#self.physic_abilities = OrderedDict()
+		#with open('ability_data/shaman_physic_abilities.csv', encoding="utf-8-sig", mode='r') as fobj:
+		#	content = csv.DictReader(fobj)
+		#	for item in content:	# every item is a dict
+		#		self.physic_abilities[item['ability_name']] = Physic_ability(item)
 		
 		# initialize attribute
 		Attribute.__init__(self, attr_dict)
@@ -420,8 +428,8 @@ class Shaman(Attribute, ShamanTalent):
 		for ability in self.spell_abilities.values():
 			ability.calculate_amount(self.spell_basic_attr, self.spell_critical_increase, self.spell_amount_increase)
 		# calculate amount of physic abilities
-		for ability in self.physic_abilities.values():
-			ability.calculate_amount(self.physic_basic_attr, self.physic_amount_increase, self.main_melee_weapon, self.off_melee_weapon, self.ranged_weapon)
+		#for ability in self.physic_abilities.values():
+		#	ability.calculate_amount(self.physic_basic_attr, self.physic_amount_increase, self.main_melee_weapon, self.off_melee_weapon, self.ranged_weapon)
 
 
 

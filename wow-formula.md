@@ -979,6 +979,14 @@ aoe技能必然是一個直接的(direct)法術，如牧師的`治療禱言`；�
 
 > 
 
+---
+
+**薩滿**
+
+元素薩
+
+> python3 sim.py --class=shaman --talent=talent_data/shaman_elemental.json --attribute=attribute_data/shaman_s6_elemental.csv
+
 ## excel天賦dump成json的命令
 
 > ./dump_from_excel.py --input=WOW-talents.xlsx --page=no-talent --start=a2 --end=l12 --type=list > no_talent.json
